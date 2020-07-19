@@ -1,0 +1,152 @@
+---
+title: "Atividade 22 - MAT0222"
+subtitle: "Álgebra Linear II"
+output: pdf_document
+---
+
+# Exercício 21 da lista 7
+
+Seja
+$$
+A=\begin{bmatrix} 1&2&3\\ 2&3&4 \\ 3&4&5\end{bmatrix}\in M_3(\mathbb R)
+$$
+Quero encontrar uma matrix ortogonal $P\in M_3(\mathbb R)$, tal que $P^tAP$ seja diagonal. Com esse fim, encontraremos o polinômio característico $p_A(x)$ associado à $A$.
+
+
+\begin{align*}
+p_A(x)&=det\begin{bmatrix} x-1&-2&-3\\ -2&x-3&-4 \\ -3&-4&x-5\end{bmatrix}=(x-1)(x-3)(x-5)-48-[9(x-3)+16(x-1)+4(x-5)]\\
+&=(x^2-4x+3)(x-5)-48-(29x-27-16-20)=(x^3-4x^2+3x-5x^2+20x-15)-48-(29x-63)\\
+&=x^3-9x^2+23x-63-29x+63=x^3-9x^2-6x=x(x^2-9x-6)
+\end{align*}
+Agora o foco é encontrar autovalores $\lambda_1$, $\lambda_2$ e $\lambda_3$ de $A$.
+
+Usando a fórmula de Bhaskara em $(x^2-9x-6)$, obtemos
+
+$$
+(x^2-9x-6)=0\implies\begin{cases}\lambda_1=\frac{9+\sqrt{105}}{2}\\ \lambda_2=\frac{9-\sqrt{105}}{2}\end{cases}
+$$
+Desta forma, 
+$$
+p_A(x)=x(x^2-9x-6)\implies\begin{cases}\lambda_1=\frac{9+\sqrt{105}}{2}\\ \lambda_2=\frac{9-\sqrt{105}}{2} \\ \lambda_3=0\end{cases}
+$$
+
+Considere neste momento os seguintes resultados:
+
+1. \begin{itshape}
+Seja $A\in M_n(\mathbb{R})$ simétrica, isto é $A=A^t$. Então $A$ é diagonalizável, e existe uma matriz $P\in M_n(\mathbb{R})$ ortogonal (isto é $P^t=P^{-1}$), tal que $P^tAP$ diagonal.
+\end{itshape}
+
+2. \begin{itshape}
+Seja $T\in\mathcal{L}(V)$ um operador normal e v e w autovetores de T associados à autovalores distintos.
+Então v e w são ortogonais.
+\end{itshape}
+
+3. **Teorema Espectral Real**
+\begin{itshape}
+    Seja $T\in\mathcal{L}(V)$ um operador normal. Se seu polinômio característico se decompõe em um produto de fatores de grau 1 em $\mathbb{K}[x]$, então$V$ possui uma base ortonormal formada por autovetores de $T$.
+\end{itshape}
+
+Considere então $A$ sendo a matriz de algum operador linear $T$ na base canônica de $\mathbb{R}^3$. Logo $T$ é um operador auto-adjunto, com autovalores $\lambda_1$, $\lambda_2$ e $\lambda_3$, além disso sabemos que todo operador auto-adjunto é normal. Então, pelo **Teorema Espectral Real** existe uma base de autovetores respectivamente associados a cada um dos autovalores, que formam uma base ortonormal. Seja $\beta=\{v_1,v_2,v_3\}$ a base descrita, vamos encontrar $v_1$, $v_2$ e $v_3$, pois encontraremos de imediato a matriz $P$ desejada após encontrarmos essa base.("matriz mudança de base")
+
+Para determinarmos $\beta$, basta encontrarmos os auto-espaços gerados por cada um dos autovalores, e escolhermos um vetor de norma 1, pois ja temos a garantia de que eles são ortogonais, pelo resultado $2.$ apresentado acima.
+
+Note que sabemos de antemão que $dimV(\lambda_3)=dimV(\lambda_2)=dimV(\lambda_1)=1$, pois temos 3 autovalores distintos, e $dim\mathbb R^3=3$.
+
+Para $V(\lambda_3)$, se $v_3=(a,b,c)\in V(\lambda_3)$ com $a,b,c \in \mathbb R$
+
+\begin{align*}
+A\cdot v_3=0 \implies \begin{bmatrix} 1&2&3\\ 2&3&4 \\ 3&4&5\end{bmatrix}\begin{bmatrix}a\\b\\c \end{bmatrix}=\begin{bmatrix}0\\0\\0 \end{bmatrix}
+\end{align*}
+
+Dessa forma, teremos o seguinte sistema linear:
+
+$$
+\begin{cases}a+2b+3c=0\\2a+3b+4c=0\end{cases}\implies\begin{cases}b+2c=0\\b=-2c\end{cases}\implies a=c
+$$
+Logo $V(\lambda_3)=[(1,-2,1)]$, como quero um $v_3\in V(\lambda_3)$ tal que $\|v_3\|=1$, então
+
+$$v_3=\left(\frac{1}{\sqrt{6}},-\frac{2}{\sqrt{6}},\frac{1}{\sqrt{6}}\right)$$
+Para $V(\lambda_2)$, se $v_2=(a,b,c)\in V(\lambda_2)$ com $a,b,c \in \mathbb R$
+
+\begin{align*}
+\left[A-\left(\frac{9-\sqrt{105}}{2}\right)I_3\right]\cdot v_2=0 \implies \begin{bmatrix} \frac{-7+\sqrt{105}}{2}&2&3\\ 2&\frac{-3+\sqrt{105}}{2}&4 \\ 3&4&\frac{1+\sqrt{105}}{2}\end{bmatrix}\begin{bmatrix}a\\b\\c \end{bmatrix}=\begin{bmatrix}0\\0\\0 \end{bmatrix}
+\end{align*}
+
+$$
+\begin{cases}a(-7+\sqrt{105})+4b+6c=0\\6a+8b+c(1+\sqrt{105})=0\end{cases}\implies\begin{cases}2a(-7+\sqrt{105})+8b+12c=0\\6a+8b+c(1+\sqrt{105})\end{cases}\implies \begin{cases}a(-20+2\sqrt{105})-c(-11+\sqrt{105})=0\end{cases}
+$$
+
+$$
+a(-20+2\sqrt{105})=c(-11+\sqrt{105})\implies a=-\frac{c}{10}(5+\sqrt{105})\implies b=\frac{c}{20} (5 - \sqrt{105})
+$$
+
+Logo $V(\lambda_2)=\left[(-\frac{1}{10}(5+\sqrt{105}),\frac{1}{20} (5 - \sqrt{105}),1)\right]$,como quero um $v_2\in V(\lambda_2)$ tal que $\|v_2\|=1$, então
+
+$$v_2=\frac{\left(-\frac{1}{10}(5+\sqrt{105}),\frac{1}{20} (5 - \sqrt{105}),1\right)}{\Big\|\left(-\frac{1}{10}(5+\sqrt{105}),\frac{1}{20} (5 - \sqrt{105}),1\right)\Big\|}$$
+$$
+\Big\|\left(-\frac{1}{10}(5+\sqrt{105}),\frac{1}{20} (5 - \sqrt{105}),1\right)\Big\|=\frac{1}{2} \sqrt{\frac{3}{10}(35 + \sqrt{105})}
+$$
+Logo,
+
+$$
+v_2=\left(-\frac{\sqrt{2}\left(5+\sqrt{105}\right)}{\sqrt{15}\sqrt{35+\sqrt{105}}},\frac{5-\sqrt{105}}{\sqrt{30}\sqrt{35+\sqrt{105}}},\frac{2\sqrt{10}}{\sqrt{3}\sqrt{35+\sqrt{105}}}\right)
+$$
+Por fim teremos,
+
+Para $V(\lambda_1)$, se $v_1=(a,b,c)\in V(\lambda_1)$ com $a,b,c \in \mathbb R$
+
+\begin{align*}
+\left[A-\left(\frac{9+\sqrt{105}}{2}\right)I_3\right]\cdot v_1=0 \implies \begin{bmatrix} \frac{-7-\sqrt{105}}{2}&2&3\\ 2&\frac{-3-\sqrt{105}}{2}&4 \\ 3&4&\frac{1-\sqrt{105}}{2}\end{bmatrix}\begin{bmatrix}a\\b\\c \end{bmatrix}=\begin{bmatrix}0\\0\\0 \end{bmatrix}
+\end{align*}
+
+$$
+\begin{cases}a(-7-\sqrt{105})+4b+6c=0\\6a+8b+c(1-\sqrt{105})=0\end{cases}\implies\begin{cases}2a(-7-\sqrt{105})+8b+12c=0\\6a+8b+c(1-\sqrt{105})\end{cases}\implies \begin{cases}a(-20-2\sqrt{105})-c(-11-\sqrt{105})=0\end{cases}
+$$
+
+$$
+a(-20-2\sqrt{105})=c(-11-\sqrt{105})\implies a=\frac{c}{10}(-5+\sqrt{105})\implies b=\frac{c}{20} (5 + \sqrt{105})
+$$
+
+Logo $V(\lambda_1)=\left[(\frac{1}{10}(-5+\sqrt{105}),\frac{1}{20} (5 + \sqrt{105}),1)\right]$, como quero um $v_1\in V(\lambda_1)$ tal que $\|v_1\|=1$, então
+
+$$v_1=\frac{\left(\frac{1}{10}(-5+\sqrt{105}),\frac{1}{20} (5 + \sqrt{105}),1\right)}{\Big\|\left(\frac{1}{10}(-5+\sqrt{105}),\frac{1}{20} (5 + \sqrt{105}),1\right)\Big\|}$$
+
+$$
+\Big\|\left(\frac{1}{10}(-5+\sqrt{105}),\frac{1}{20} (5 + \sqrt{105}),1\right)\Big\|=\frac{1}{2} \sqrt{\frac{3}{10}(35 - \sqrt{105})}
+$$
+Logo,
+
+$$
+v_1=\left(\frac{\sqrt{2}\left(-5+\sqrt{105}\right)}{\sqrt{15}\sqrt{35-\sqrt{105}}},\frac{5+\sqrt{105}}{\sqrt{30}\sqrt{35-\sqrt{105}}},\frac{2\sqrt{10}}{\sqrt{3}\sqrt{35-\sqrt{105}}}\right)
+$$
+
+
+Finalmente, podemos obter a matriz $P$, desejada:
+
+$$
+P=\begin{bmatrix}\vdots&\vdots&\vdots\\v_1&v_2&v_3\\\vdots&\vdots&\vdots\end{bmatrix}=
+\begin{bmatrix}
+\frac{\sqrt{2}\left(-5+\sqrt{105}\right)}{\sqrt{15}\sqrt{35-\sqrt{105}}}&-\frac{\sqrt{2}\left(5+\sqrt{105}\right)}{\sqrt{15}\sqrt{35+\sqrt{105}}}&\frac{1}{\sqrt{6}}\\
+\frac{5+\sqrt{105}}{\sqrt{30}\sqrt{35-\sqrt{105}}}&\frac{5-\sqrt{105}}{\sqrt{30}\sqrt{35+\sqrt{105}}}&-\frac{2}{\sqrt{6}}\\
+\frac{2\sqrt{10}}{\sqrt{3}\sqrt{35-\sqrt{105}}}&\frac{2\sqrt{10}}{\sqrt{3}\sqrt{35+\sqrt{105}}}&\frac{1}{\sqrt{6}}
+\end{bmatrix}\approx\begin{bmatrix}0.38509&-0.827671&0.408248\\ 0.55951& -0.142414&-0.816497\\ 0.733931&0.542844&0.408248\end{bmatrix}=P'
+$$
+Desta forma, assim como foi dito acima, pelo *Teorema Espectral Real*, podemos dizer que a matriz $P$, construída dessa maneira, é a matriz ortogonal $P$, tal que 
+
+$$
+D=P^tAP
+$$
+onde $D$ é a matriz diagonal formada pelos autovalores de $A$.
+
+Apenas com o intuito de verificarmos nosso resultado, iremos obter uma aproximação de $D$, por $P'$
+$$
+\begin{bmatrix}0.38509&0.55951&0.733931\\ \:\:-0.827671&-0.142414&0.542844\\ \:\:0.408248&-0.816497&0.408248\end{bmatrix}\begin{bmatrix}\:1&2&3\\ \:\:2&3&4\:\\ \:\:3&4&5\end{bmatrix}\begin{bmatrix}0.38509&-0.827671&0.408248\\ \:\:\:\:0.55951&\:-0.142414&-0.816497\\ \:\:\:\:0.733931&0.542844&0.408248\end{bmatrix}= D'
+$$
+$$
+D'=\begin{pmatrix}9.62347\dots &9.46871E-7&-5.38443\dots E-6\\ 9.46871E-7&-0.62347\dots &-8.8792E-8\\ -5.38443\dots E-6&-8.8792E-8&0\end{pmatrix}\approx
+\begin{bmatrix}\frac{9+\sqrt{105}}{2} &0&0\\
+0&\frac{9-\sqrt{105}}{2}&0\\
+0&0&0\end{bmatrix}=D
+$$
+
+E o exercício está terminado.

@@ -1,0 +1,388 @@
+---
+title: "Lista 2 - MAE0217"
+output:
+  html_document: default
+  word_document: default
+  pdf_document: default
+---
+
+# Exercício 33 do Capítulo 3
+## a)
+
+```{r, echo = FALSE}
+dados <- rnorm(1000,12,4)
+
+hist(dados,main = "Histograma dos dados gerados",freq = F)
+dp <- sd(dados)
+m <- mean(dados)
+
+```
+
+* Desvio padrão: `r dp`
+* Média: `r m`
+
+## b)
+### Para 500 amostras de tamanho n = 4
+```{r, echo = F}
+mds <- c()
+for(i in 1:500){
+mds[i] <-mean(rnorm(4,12,4))
+}
+hist(mds,main = "Histograma das médias",xlab = "Médias amostrais",freq = F)
+dpm <- sd(mds)
+```
+
+* Desvio padrão amostral das médias: `r dpm`
+
+## c)
+### Para 500 amostras de tamanho n = 9:
+
+```{r,echo =F}
+mds1 <- c()
+for(i in 1:500){
+mds1[i] <-mean(rnorm(9,12,4))
+}
+hist(mds1,main = "Histograma das médias",xlab = "Médias amostrais",freq = F)
+dpm1 <- sd(mds1)
+
+
+```
+
+* Desvio padrão amostral das médias: `r dpm1`
+
+### Para 500 amostras de tamanho n = 16:
+
+```{r, echo =F}
+mds2 <- c()
+for(i in 1:500){
+mds2[i] <-mean(rnorm(16,12,4))
+}
+hist(mds2,main = "Histograma das médias",xlab = "Médias amostrais",freq = F)
+dpm2 <- sd(mds2)
+```
+
+* Desvio padrão amostral das médias: `r dpm2`
+
+## d)
+## Para distribuição Qui-quadrado 
+```{r,echo = F }
+dados <- rchisq(1000,3)
+hist(dados,main = "Histograma dos dados gerados",freq = F)
+dp <- sd(dados)
+m <- mean(dados)
+```
+
+* Desvio padrão: `r dp`
+* Média: `r m`
+
+### n = 4
+
+```{r, echo = F}
+mds <- c()
+for(i in 1:500){
+mds[i] <-mean(rchisq(4,3))
+}
+hist(mds,main = "Histograma das médias",xlab = "Médias amostrais",freq = F)
+dpm <- sd(mds)
+```
+
+* Desvio padrão amostral das médias: `r dpm`
+
+### n = 9
+
+```{r,echo =F}
+mds1 <- c()
+for(i in 1:500){
+mds1[i] <-mean(rchisq(9,3))
+}
+hist(mds1,main = "Histograma das médias",xlab = "Médias amostrais",freq = F)
+dpm1 <- sd(mds1)
+
+
+```
+
+* Desvio padrão amostral das médias: `r dpm1`
+
+### n = 16
+
+```{r, echo =F}
+mds2 <- c()
+for(i in 1:500){
+mds2[i] <-mean(rchisq(16,3))
+}
+hist(mds2,main = "Histograma das médias",xlab = "Médias amostrais",freq = F)
+dpm2 <- sd(mds2)
+```
+
+* Desvio padrão amostral das médias: `r dpm2`
+
+# Exercício 1 do Capítulo 4
+```{r, echo= F,warning= F}
+library(readxl)
+library(knitr)
+empresa <- read_excel(path = "C:/Users/kevin/Downloads/empresa.xls",range = "A2:H37")
+tabela1 <- table(empresa$`Estado Civil`,empresa$`Região de Procedência`)
+kable(prop.table(tabela1,margin =NULL),caption = "Tabela de distribuição de frequencias para Estado Civil e Região de Procedencia")
+#############################################################################
+tabela2 <- table(empresa$`Grau de Instrução`,empresa$`Região de Procedência`)
+kable(prop.table(tabela2,margin =NULL),caption = "Tabela de distribuição de frequencias  para Grau de instrução e Região de Procedencia")
+#############################################################################
+boxplot(empresa$`Salario (x Sal Min)`~empresa$`Região de Procedência`,ylab = "Salário Mínimo",xlab ="Região de Procedência",main = "Boxplot do salário mínimo pela região de procedência")
+#############################################################################
+boxplot(empresa$`N de Filhos`~empresa$`Região de Procedência`,ylab = "Número de filhos",xlab ="Região de Procedência",main = "Boxplot do n° de filhos pela região de procedência")
+#############################################################################
+boxplot(empresa$Anos~empresa$`Região de Procedência`,ylab = "Anos",xlab ="Região de Procedência",main = "Boxplot dos anos pela região de procedência")
+#############################################################################
+boxplot(empresa$Meses~empresa$`Região de Procedência`,ylab = "Meses",xlab ="Região de Procedência",main = "Boxplot dos meses pela região de procedência")
+```
+
+# Exercício 4 do capítulo 4
+## a)
+```{r, echo = F,warning= F,message=F}
+x <- seq(0,100)
+library(readxl)
+library(knitr)
+library(tidyverse)
+coron<- read_excel(path="C:/Users/kevin/Downloads/coronarias.xls",sheet = 2)
+coron$IMC <- as.numeric(sub(",",".",coron$IMC))
+imcf <- subset(coron,select= "IMC",IDADFEM != 0,drop = T)
+idadef <- subset(coron, select = "IDADFEM",subset = IDADFEM != 0,drop = T)
+imcm <- subset(coron,select= "IMC",subset = IDADMAS != 0,drop = T)
+idadem <- subset(coron, select = "IDADMAS",subset = IDADMAS != 0,drop = T)
+
+qqplot(imcf,idadef,xlab = "IMC das mulheres",ylab = "Idade das mulheres",main = "Gráfico QQ para o IMC e as Idades das mulheres")
+lines(x,col = "red")
+qqplot(imcm,idadem,xlab ="IMC dos homens",ylab = "Idade dos homens",main = "Gráfico QQ para o IMC e as Idades das homens")
+lines(x,col = "red")
+```
+
+## b)
+#### Observação: Para o cálculo dos coeficientes abaixo não foram considerados os indivíduos que possuiam algum dado faltante nas variáveis "peso" e "altura" 
+```{r, echo = F,message=F,warning=F}
+coron$ALTURA <- as.numeric(sub(",",".",coron$ALTURA))
+coron$PESO <- as.numeric(sub(",",".",coron$PESO))
+altura <-subset(coron,select = "ALTURA",subset = !is.na(ALTURA&PESO),drop = T)
+peso <- subset(coron,select = "PESO",subset = !is.na(ALTURA&PESO),drop = T)
+pearson <- cor(altura,peso)
+spearman <- cor(altura,peso,method = "spearman")
+```
+* Coeficiente de correlação de Pearson : `r pearson`
+* Coeficiente de correlação de Spearman : `r spearman`
+
+## c)
+
+# N FAÇO A MENOR IDEIA DO QUE FAZER NESSE EXERCICIO
+
+```{r,echo = F,message=F,warning=F}
+
+coron$TABAG4 <- as.numeric(sub(",",".",coron$TABAG4))
+coron$ARTER <- as.numeric(sub(",",".",coron$ARTER))
+tabag <- subset(coron,select = "TABAG4",subset = !is.na(TABAG4&ARTER)&(TABAG4!=4&TABAG4!=5),drop = T)
+arter <- subset(coron,select = "ARTER",subset = !is.na(TABAG4&ARTER)&(TABAG4!=4&TABAG4!=5),drop = T)
+tabela3 <- table(tabag,arter)
+kable(prop.table(tabela3,margin =NULL),caption = "Tabela de distribuição de frequencias para tabagismo e arteriopatia")
+``` 
+
+# Exercício 5 do capítulo 4
+## a)
+```{r,echo = F,message=F,warning=F}
+library(readxl)
+library(knitr)
+library(tidyverse)
+x <- seq(0,100)
+esf <-  read_excel(path="C:/Users/kevin/Downloads/esforco.xls",sheet = 2)
+esf$...49 <- as.numeric(esf$...49)
+esf$...14 <- as.numeric(esf$...14)
+
+pico_ch <- subset(esf,select="...49",subset = ...3 == "CH" & !(is.na(...49&...14)|(is.character(...49|...14))),drop =T)
+
+pico_id <- subset(esf,select="...49",subset = ...3 == "ID" & !(is.na(...49&...14)|(is.character(...49|...14))),drop =T)
+
+pico_is <- subset(esf,select="...49",subset = ...3 == "IS" & !(is.na(...49&...14)|(is.character(...49|...14))),drop =T)
+
+pico_c <- subset(esf,select="...49",subset = ...3 == "C" & !(is.na(...49&...14)|(is.character(...49|...14))),drop =T)
+
+repo_ch <- subset(esf,select="...14",subset = ...3 == "CH" & !(is.na(...49&...14)|(is.character(...49|...14))),drop =T)
+
+repo_id <- subset(esf,select="...14",subset = ...3 == "ID" & !(is.na(...49&...14)|(is.character(...49|...14))),drop =T)
+
+repo_is <- subset(esf,select="...14",subset = ...3 == "IS" & !(is.na(...49&...14)|(is.character(...49|...14))),drop =T)
+
+repo_c <- subset(esf,select="...14",subset = ...3 == "C" & !(is.na(...49&...14)|(is.character(...49|...14))),drop =T)
+
+#QQ-plots--------------------------------------------
+```
+```{r,echo = F,message=F,warning=F}
+qqplot(pico_ch,repo_ch,xlab ="VO2 no pico",ylab = "VO2 em repouso",main = "Gráfico QQ para o VO2 para o nível CH da etiologia")
+
+qqplot(pico_id,repo_id,xlab ="VO2 no pico",ylab = "VO2 em repouso",main = "Gráfico QQ para o VO2 para o nível ID da etiologia")
+
+qqplot(pico_is,repo_is,xlab ="VO2 no pico",ylab = "VO2 em repouso",main = "Gráfico QQ para o VO2 para o nível IS da etiologia")
+
+qqplot(pico_c,repo_c,xlab ="VO2 no pico",ylab = "VO2 em repouso",main = "Gráfico QQ para o VO2 para o nível C da etiologia")
+ch <- data.frame(pico_ch,repo_ch)
+id <- data.frame(pico_id,repo_id)
+is <- data.frame(pico_is,repo_is)
+c <- data.frame(pico_c,repo_c)
+ta<- table(summary(ch))
+summary(is)
+summary(id)
+summary(c)
+ta
+```
+
+#### Bônus:
+```{r,echo = F,message=F,warning=F}
+boxplot(esf$...49~esf$...3,ylab = "VO2 no pico",xlab = "Nível Etimológico",main = "Boxplot de VO2 nos niveis etiológicos")
+boxplot(esf$...14~esf$...3,ylab = "VO2 no repouso",xlab = "Nível Etimológico",main = "Boxplot de VO2 nos niveis etiológicos")
+```
+
+## b)
+```{r,echo = F,message=F,warning=F}
+library(ggplot2)
+diferencia <- pico_ch - repo_ch
+media <- (pico_ch + repo_ch) / 2
+porcentaje <- ((diferencia / media) * 100)
+datos <- data.frame(pico_ch, repo_ch, diferencia, media, porcentaje)
+#--------------------------------------------------------------
+#Bland-Altman plot no ggplot2
+  
+BA_plot <- ggplot(data = datos, aes(x = media, y = diferencia)) +
+             geom_point(pch = 1, size = 1.5, col = "black") +
+             labs(title = "Bland-Altman plot no nível CH da etiologia", x = "media VO2 em pico e V02 em repouso", 
+                  y = "VO2 em pico - V02 em repouso") +
+             ylim(mean(datos$diferencia) - 4 * sd(datos$diferencia), 
+                  mean(datos$diferencia) + 4 * sd(diferencia)) +
+             # Línea de bias
+             geom_hline(yintercept = mean(datos$diferencia), lwd = 1) +
+             # Línea en y=0
+             geom_hline(yintercept = 0, lty = 3, col = "grey30") +
+             # Limits of Agreement
+             geom_hline(yintercept = mean(datos$diferencia) + 
+                        1.96 * sd(datos$diferencia), 
+                        lty = 2, col = "firebrick") +
+             geom_hline(yintercept = mean(datos$diferencia) - 
+                        1.96 * sd(datos$diferencia), 
+                        lty = 2, col = "firebrick")+
+             theme(plot.title = element_text(hjust = 0.5))
+
+BA_plot
+```
+
+```{r,echo = F,message=F,warning=F}
+diferencia <- pico_id - repo_id
+media <- (pico_id + repo_id) / 2
+porcentaje <- ((diferencia / media) * 100)
+datos <- data.frame(pico_id, repo_id, diferencia, media, porcentaje)
+#--------------------------------------------------------------
+#Bland-Altman plot no ggplot2
+  
+BA_plot <- ggplot(data = datos, aes(x = media, y = diferencia)) +
+             geom_point(pch = 1, size = 1.5, col = "black") +
+             labs(title = "Bland-Altman plot no nível ID da etiologia", x = "media VO2 em pico e V02 em repouso", 
+                  y = "VO2 em pico - V02 em repouso") +
+             ylim(mean(datos$diferencia) - 4 * sd(datos$diferencia), 
+                  mean(datos$diferencia) + 4 * sd(diferencia)) +
+             # Línea de bias
+             geom_hline(yintercept = mean(datos$diferencia), lwd = 1) +
+             # Línea en y=0
+             geom_hline(yintercept = 0, lty = 3, col = "grey30") +
+             # Limits of Agreement
+             geom_hline(yintercept = mean(datos$diferencia) + 
+                        1.96 * sd(datos$diferencia), 
+                        lty = 2, col = "firebrick") +
+             geom_hline(yintercept = mean(datos$diferencia) - 
+                        1.96 * sd(datos$diferencia), 
+                        lty = 2, col = "firebrick")+
+             theme(plot.title = element_text(hjust = 0.5))
+
+BA_plot
+```
+
+```{r,echo = F,message=F,warning=F}
+diferencia <- pico_is - repo_is
+media <- (pico_is + repo_is) / 2
+porcentaje <- ((diferencia / media) * 100)
+datos <- data.frame(pico_is, repo_is, diferencia, media, porcentaje)
+#--------------------------------------------------------------
+#Bland-Altman plot no ggplot2
+  
+BA_plot <- ggplot(data = datos, aes(x = media, y = diferencia)) +
+             geom_point(pch = 1, size = 1.5, col = "black") +
+             labs(title = "Bland-Altman plot no nível IS da etiologia", x = "media VO2 em pico e V02 em repouso", 
+                  y = "VO2 em pico - V02 em repouso") +
+             ylim(mean(datos$diferencia) - 4 * sd(datos$diferencia), 
+                  mean(datos$diferencia) + 4 * sd(diferencia)) +
+             # Línea de bias
+             geom_hline(yintercept = mean(datos$diferencia), lwd = 1) +
+             # Línea en y=0
+             geom_hline(yintercept = 0, lty = 3, col = "grey30") +
+             # Limits of Agreement
+             geom_hline(yintercept = mean(datos$diferencia) + 
+                        1.96 * sd(datos$diferencia), 
+                        lty = 2, col = "firebrick") +
+             geom_hline(yintercept = mean(datos$diferencia) - 
+                        1.96 * sd(datos$diferencia), 
+                        lty = 2, col = "firebrick")+
+             theme(plot.title = element_text(hjust = 0.5))
+
+BA_plot
+```
+
+```{r,echo = F,message=F,warning=F}
+diferencia <- pico_c - repo_c
+media <- (pico_c + repo_c) / 2
+porcentaje <- ((diferencia / media) * 100)
+datos <- data.frame(pico_c, repo_c, diferencia, media, porcentaje)
+#--------------------------------------------------------------
+#Bland-Altman plot no ggplot2
+  
+BA_plot <- ggplot(data = datos, aes(x = media, y = diferencia)) +
+             geom_point(pch = 1, size = 1.5, col = "black") +
+             labs(title = "Bland-Altman plot no nível C da etiologia", x = "media VO2 em pico e V02 em repouso", 
+                  y = "VO2 em pico - V02 em repouso") +
+             ylim(mean(datos$diferencia) - 4 * sd(datos$diferencia), 
+                  mean(datos$diferencia) + 4 * sd(diferencia)) +
+             # Línea de bias
+             geom_hline(yintercept = mean(datos$diferencia), lwd = 1) +
+             # Línea en y=0
+             geom_hline(yintercept = 0, lty = 3, col = "grey30") +
+             # Limits of Agreement
+             geom_hline(yintercept = mean(datos$diferencia) + 
+                        1.96 * sd(datos$diferencia), 
+                        lty = 2, col = "firebrick") +
+             geom_hline(yintercept = mean(datos$diferencia) - 
+                        1.96 * sd(datos$diferencia), 
+                        lty = 2, col = "firebrick")+
+             theme(plot.title = element_text(hjust = 0.5))
+
+BA_plot
+```
+
+## c)
+```{r,echo = F,message=F,warning=F}
+#Boxplot
+esf$...23 <- as.numeric(esf$...23)
+esf$...11 <- as.numeric(esf$...11)
+nyha <- subset(esf,select="...11",subset = (!(is.na(...11&...23))&(...11 != 0)),drop = T)
+fc <- subset(esf,select="...23",subset = (!(is.na(...11&...23))&(...11 != 0)),drop = T)
+boxplot(fc~nyha,xlab = "Categorias NYHA",ylab = "Freqência cardíaca",main = "Boxplot da frequência cardíaca por categoria NYHA")
+#----------------------------------------
+#Gráfico de perfis médios usando ggplot2 e rmisc
+library(Rmisc)
+library(ggplot2)
+data <- data.frame(fc,nyha)
+freqplot <- summarySE(data, measurevar ="fc",groupvars = "nyha")
+freqplot$nyha <- factor(c("1", "2", "3", "4"), 
+  levels=c("1", "2", "3", "4"))
+
+ggplot(freqplot, aes(x=nyha, y=fc, group=1)) + 
+  geom_errorbar(aes(ymin=fc-se, ymax=fc+se), width=.1) +
+  geom_line() +
+  geom_point() +
+  labs(x="Categoria NYHA", y="Frequência cardíaca (bpm)")
+```
+
+
+
+

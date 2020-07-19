@@ -1,0 +1,275 @@
+---
+title: "Lista 5 - MAE0217"
+output: word_document
+---
+```{r,echo=F,warning=FALSE,include=FALSE}
+library(dplyr)
+library(caret)
+library(pROC)
+library(stringr)
+```
+
+# Exercício 18 - Capítulo 6
+```{r}
+par <- c(0.69,0.33,-0.03)
+od <-exp(par) 
+se <- c(0.12,0.10,0.005)
+```
+
+Considerando o seguinte modelo:
+
+$$log\left\{ \frac{\pi_i(x_i,w_i)}{1-\pi_i(x_i,w_i)}\right\}=\alpha+\beta x_i+\gamma(w_i-5)$$
+Onde sabemos que $x_i$ e $w_i$ representam, respectivamente, o gênero e idade da i-éisma criança.
+
+## a)
+
+Podemos interpretar os parâmetros $\alpha$, $\beta$ e $\gamma$ da seguinte forma:
+
+1. $\alpha$ corresponde ao logaritmo da chance de preferência das crianças do gênero feminino com 5 anos de idade.
+2. $\beta$ corresponde ao lagaritmo da razão entre a chance de preferência das crianças do gênero masculino com e a chance corresponde para crianças do gênero feminino com a mesma idade.
+3. $\gamma$ corresponde ao logaritmo da razão entre a chance de preferência para crianças com diferença de 1 ano e do mesmo gênero.
+
+## b)
+
+Denominaremos a razão de chances por $OD$ por convenção (Odds Ratio). 
+
+Sabemos que a a variação em uma unidade em $x_i$ atera $\gamma$ no log da chance de preferência, logo se queremos saber a razão de chances com a variação de 5 unidades em $x_i$ basta fazer o seguinte cálculo:
+$$OD=exp\{5\hat\gamma\}=`r round(exp(par[3]*5),3)`$$
+
+## c)
+Para a construção de intervalos de confiança usaremos os erros padrões dados no enunciado de exercício.
+Inicialemnte encontraremos um intervalo de confiança para 
+$$IC(\beta,95\%)=[`r par[2]-1.96*se[2]`,`r par[2]+1.96*se[2]`]$$
+$$IC(\gamma,95\%)=[`r par[3]-1.96*se[3]`,`r par[3]+1.96*se[3]`]$$
+Agora para a construção dos intervalos de confiança pedidos iremos exponenciar os limites dos respectivos intervalos de confiança(com 3 casas decimais),
+
+$$IC(\rm{exp} \{ \beta \},95\%)=[`r round(exp(par[2]-1.96*se[2]),3)`,`r round(exp(par[2]+1.96*se[2]),3)`]$$
+Esse intervalo pode ser interpretado como um intervalo de confiança para a razão entre chance da preferência por Kcola por crianças do gênero masculino e a chance corresponde para crianças do gênero feminino, ou seja, espera-se que em 95 amostras de 100 de mesmo tamanho, um intervalo construído da mesma maneira, contenha a razão de chances descrita.
+
+Tomando este intervalo como base, podemos dizer que espera-se a preferência por Kcola por crianças do gênero masculino é maior do que para crianças do gênero feminino, para crianças de mesmas idades.
+
+$$IC(\rm{exp}\{\gamma\},95\%)=[`r round(exp(par[3]-1.96*se[3]),3)`,`r round(exp(par[3]+1.96*se[3]),3)`]$$
+
+Esse intervalo pode ser interpretado como um intervalo de confiança para a razão entre chance da preferência por Kcola por crianças que diferem em um ano, ou seja, espera-se que em 95 amostras de 100 de mesmo tamanho, um intervalo construído da mesma maneira, contenha a razão de chances descrita.
+
+Tomando este intervalo como base, podemos dizer que espera-se a preferência por Kcola por crianças mais velhas, seja menor do que para crianças mais novas, para crianças do mesmo sexo.
+
+## d)
+
+$$\hat\pi(x=1,w=15)=\frac{\rm{exp}\{`r par[1]+par[2]+par[3]*(15-5)`\}}{1+\rm{exp}\{`r par[1]+par[2]+par[3]*(15-5)`\}}=`r round(exp(par[1]+par[2]+par[3]*(15-5))/(1+exp( par[1]+par[2]+par[3]*(15-5))),3)`$$
+
+# Exercício 19 - Capítulo 6
+Considere as seguintes expressões:
+$$\mathrm{log} \left\{\frac{P(Y_i=1|X=x_i)}{P(Y_i=0|X=x_i)}\right\}=\alpha+\beta x_i\hspace{1cm}e\hspace{1cm}P(Y_i=1|X=x_i)=\frac{\mathrm{exp}(\alpha+\beta x_i)}{1+\mathrm{exp}(\alpha+\beta x_i)}$$
+Considere a equação do lado esquerdo, então se as duas expressões são equivalentes eu devo ser capaz de chegar na expressão da equação do lado direito,
+
+$$\mathrm{log} \left\{\frac{P(Y_i=1|X=x_i)}{P(Y_i=0|X=x_i)}\right\}=\alpha+\beta x_i$$
+Exponenciando ambos os membros obtemos,
+$$\frac{P(Y_i=1|X=x)}{P(Y_i=0|X=x)}=\mathrm{exp}\{\alpha+\beta x_i\}$$
+Como sabemos que a variavel $Y_i$ só assume os valores $0$ e $1$, pode-se afirmar que:
+$$P(Y_i=0|X=x_i)=P(Y_i=1|X=x_i)^C=1-P(Y_i=1|X=x_i)$$
+Então,
+$$\frac{P(Y_i=1|X=x_i)}{1-P(Y_i=1|X=x_i)}=\mathrm{exp}\{\alpha+\beta x_i\}$$
+$$P(Y_i=1|X=x_i)=\mathrm{exp}\{\alpha+\beta x_i\}-P(Y_i=1|X=x_i)\mathrm{exp}\{\alpha+\beta x_i\}$$
+$$P(Y_i=1|X=x)+P(Y_i=1|X=x_i)\mathrm{exp}\{\alpha+\beta x_i\}=\mathrm{exp}\{\alpha+\beta x_i\}$$
+$$P(Y_i=1|X=x_i)(1+\mathrm{exp}\{\alpha+\beta x_i\})=\mathrm{exp}\{\alpha+\beta x_i\}$$
+$$P(Y_i=1|X=x_i)=\frac{\mathrm{exp}(\alpha+\beta x_i)}{1+\mathrm{exp}(\alpha+\beta x_i)}$$
+Sabemos ainda que 
+$$0<\mathrm{exp}(a)<+\infty\hspace{1cm}\forall a\in \mathbb{R}$$
+logo,
+$$\lim_{exp(\alpha+\beta x_i)\to+\infty}\frac{\mathrm{exp}(\alpha+\beta x_i)}{1+\mathrm{exp}(\alpha+\beta x_i)}=1\hspace{1cm}e\hspace{1cm}\lim_{exp(\alpha+\beta x_i)\to0}\frac{\mathrm{exp}(\alpha+\beta x_i)}{1+\mathrm{exp}(\alpha+\beta x_i)}=0$$
+Então, independente dos valores$\alpha$,$\beta$ e $x_i$, 
+$$0<P(Y_i=1|X=x_i)<1$$
+
+# Exercício 20 - Capítulo 6
+Considere novamente o modelo
+$$\mathrm{log} \left\{\frac{P(Y_i=1|X=x_i)}{P(Y_i=0|X=x_i)}\right\}=\alpha+\beta x_i$$
+É fácil ver que 
+$$\beta=\alpha -\alpha+\beta x_i-\beta x_i +\beta=[\alpha+\beta (x_i+1)]-(\alpha+\beta x_i)$$
+$$\beta=\mathrm{log} \left\{\frac{P(Y_i=1|X=x_i+1)}{P(Y_i=0|X=x_i+1)}\right\}-\mathrm{log} \left\{\frac{P(Y_i=1|X=x_i)}{P(Y_i=0|X=x_i)}\right\}$$
+$$\beta=\mathrm{log} \left\{\frac{\frac{P(Y_i=1|X=x_i+1)}{P(Y_i=0|X=x_i+1)}}{ \frac{P(Y_i=1|X=x_i)}{P(Y_i=0|X=x_i)}}\right\}$$
+Seja $C_{x_i}$ a chance de resposta positiva para um paciente com $x_i$ unidades na variável explicativa e definida por 
+$$C_{x_i}=\frac{P(Y_i=1|X=x_i)}{P(Y_i=0|X=x_i)}$$
+Então é fácil ver que,
+$$\beta=\mathrm{log}\left\{\frac{C_{x_i+1}}{C_{x_i}}\right\}$$
+Dessa maneira fica evidente que $\beta$ representa o logaritmo da razão entre as chances de resposta positiva para pacientes com diferença de uma unidade na variável explicativa.
+
+# Exercício 21 - Capítulo 6 
+
+```{r}
+diab <- c(1,4,7,10,13,16,19,22)
+sim <- c(17,26,39,27,35,37,26,23)
+nao <- c(215,218,137,62,36,16,13,15)
+df <- data.frame(diab,sim,nao)
+m <- matrix(data=c(sim,nao),ncol=2)
+mod <- glm(formula = m~diab,family = binomial)
+summary(mod)
+```
+Desta forma podemos obter 
+$$\mathrm{exp}(\hat\alpha)= `r round(exp(mod$coef[1]),3)` $$
+$$\mathrm{exp}(\hat\beta)= `r round(exp(mod$coef[2]),3)` $$
+Onde
+
+1. $\mathrm{exp}(\hat\alpha)$ representa a chance de ocorrência de retinopatia para uma duração de 0 anos de diabetes.
+2. $\mathrm{exp}(\hat\beta)$ represeta a razão entre a chance de ocorrência de retinopatia para pacientes com um ano de diferença na duração do diabetes.
+Podemos concluir que para a variação de um ano na duração da diabete a chance de ocorrência de retinopatia aumenta em 19,7%.
+
+# Exercício 22 - Capítulo 6
+Considere o seguinte modelo 
+$$log\left\{ \frac{\pi_i(\mathrm{\mathbf{x}})}{1-\pi_i(\mathbf{{x}})}\right\}=\beta_0+<\mathbf{{x}},\beta'>$$
+$$\mathbf{{x}}=[x_1,x_2,x_3,x_4,x_5,x_6,x_7,x_8]$$
+$$\beta'=[\beta_1,\beta_2,\beta_3,\beta_4,\beta_5,\beta_6,\beta_7,\beta_8]$$
+Onde $x_1$ representa a idade (anos),$x_2$ representa a presença ou não de dormenstrual, valendo 1 em caso positivo e 0 caso contrário, as variáveis $x_3,x_4,x_5,x_6$ idicam na ordem, a intensidade da dismenorreia, leve, moderada, intensa e incapacitante, valendo 1 caso a intensidade seja a correspondente e 0 caso contrário e por último as variáveis $x_7,x_8$ indicam o tipo de esterilidade, primária ou secundária, valendo 1 caso a esterilidade seja a correspondente e 0 caso contrário.
+
+A tabela abaixo expressa um resumo dos dados considerados para o ajuste do modelo,
+```{r}
+endo <- na.omit(readxl::read_excel(path="/Users/kevin/Downloads/endometriose2.xls"))
+endo2 <- endo %>% 
+  filter(tipoesteril!="sim") %>% 
+  select(endometriose,idade,dormenstrual,dismenorreia,tipoesteril) %>% 
+  mutate(endometriose=as.factor(as.numeric(endometriose=="sim"))) %>% 
+  mutate(dormenstrual=as.factor(as.numeric(dormenstrual=="sim"))) 
+endo2$dismenorreia<- as.factor(endo2$dismenorreia)
+endo2$tipoesteril<- as.factor(endo2$tipoesteril)
+endo2$endometriose<- as.factor(endo2$endometriose)
+endo2$dismenorreia <- factor(as.character(endo2$dismenorreia),levels=c("nao","leve","moderada","intensa","incapacitante"))
+endo2$tipoesteril <- factor(endo2$tipoesteril,levels=c("nao","primaria","secundaria"))
+summary(endo2)
+endo2$idade <- endo2$idade-14
+```
+
+Observe que a idade minima observada é de 14 anos, então para maior compatibilidade com o modelo, o intercepto do modelo $\beta_0$ será interpretado como o logaritmo da chance de ocorrência de endometriose para indivíduos de 14 anos sem dormenstrual, que não apresentam dismenorreia e não estéreis. Os outros coeficiente serão explicados com o auxílio do seguinte código  **R**:
+
+```{r}
+logistic_model <- glm(formula = endometriose~.,data=endo2,family = binomial(link = "logit"))
+summary(logistic_model)
+coef <- exp(logistic_model$coefficients)
+ep <- summary(logistic_model)$coefficients[,2]
+```
+
+1. $\beta_1$ representa o logaritmo da razão entre a chance de ocorrência de endometriose em indivíduos com diferença de 1 ano de idade com as mesmas características(dor menstrual,tipo de esterilidade e dismenorréia).
+2. $\beta_2$ representa o logaritmo da razão entre a chance de ocorrência de endometriose em indivíduos que apresentam dor menstrual e indivíduos que não e com as mesmas características(idade,tipo de esterilidade e dismenorréia).
+3. $\beta_3$ representa o logaritmo da razão entre a chance de ocorrência de endometriose em indivíduos com dismenorréia leve e indivíduos sem dismenorréia com as mesmas características(idade, dor menstrual,tipo de esterilidade).
+4. $\beta_4$ representa o logaritmo da razão entre a chance de ocorrência de endometriose em indivíduos com dismenorréia moderada e indivíduos sem dismenorréia com as mesmas características(idade, dor menstrual,tipo de esterilidade).
+5. $\beta_5$ representa o logaritmo da razão entre a chance de ocorrência de endometriose em indivíduos com dismenorréia intensa e indivíduos sem dismenorréia com as mesmas características(idade, dor menstrual,tipo de esterilidade).
+6. $\beta_6$ representa o logaritmo da razão entre a chance de ocorrência de endometriose em indivíduos com dismenorréia incapacitante e indivíduos sem dismenorréia com as mesmas características(idade, dor menstrual,tipo de esterilidade).
+7. $\beta_7$ representa o logaritmo da razão entre a chance de ocorrência de endometriose em indivíduos com esterilidade primária e indivíduos não estéreis com as mesmas características(idade, dor menstrual,dismenorréia).
+8. $\beta_8$ representa o logaritmo da razão entre a chance de ocorrência de endometriose em indivíduos com esterilidade secundária e indivíduos não estéreis com as mesmas características(idade, dor menstrual,dismenorréia).
+
+
+# Exercício 5 - Capítulo 8
+O objetivo é escolher o melhor modelo com base na acurácia, desta forma, iremos ajustar os modelos pedidos em cada item, e criar uma tabela onde cada linha representa um modelo, além disso essa tabela terá três colunas, a coluna da esquerda especifica as variáveis explicativas utilizadas no modelo, a coluna do meio e a coluna da direita indicam respectivamente, a acurácia e o coeficiente Kappa de Cohen($\kappa$) obtidos com uma validação cruzada de ordem 5.
+```{r}
+# Já foi criado um data frame com as variaveis que serão utilizadas. No exercício anterior.
+#Vamos usar os pacotes caret e pROC
+set.seed(1234)
+var <- c("idade","dismenorreia","dormenstrual","tipoesteril")
+kappa <- vector(mode = "numeric",4)
+```
+
+## i)
+Para modelos com apenas uma variável explicativa:
+
+```{r}
+acurr <- vector(mode = "numeric",4)
+kappa <- vector(mode = "numeric",4)
+cont <- 1
+for(v in var){
+  train_control = trainControl(method="repeatedcv", number=5,repeats=5)
+  frmla <- as.formula(str_c("endometriose~",v))
+  model1 = train(frmla, data=endo2,method="glm", family=binomial, trControl=train_control)
+  acurr[cont] <- round(model1$results$Accuracy,3)
+  kappa[cont] <- round(model1$results$Kappa,3)
+  prev <- predict(model1,newdata = endo2,type = "raw")
+  cont <- cont+1
+}
+
+knitr::kable(data.frame("Variavel explicativa do modelo"=str_to_title(var),"Acurácia"=acurr,"Kappa"=kappa))
+```
+
+## ii)
+Para modelos com duas variáveis explicativas:
+
+```{r}
+control <- vector("character",4)
+acurr <- vector(mode = "numeric",6)
+kappa <- vector(mode = "numeric",6)
+cont <- 1
+cont2 <- 1
+variaveis <- vector("character",6)
+for(v in var){
+  control[cont2] <- v
+  for(v2 in var){
+    if(!(v2 %in% control)){
+      train_control = trainControl(method="repeatedcv", number=5,repeats=5)
+      frmla <- as.formula(str_c("endometriose~",v,"+",v2))
+      model1 = train(frmla, data=endo2,method="glm", family=binomial,trControl=train_control)
+      acurr[cont] <- round(model1$results$Accuracy,3)
+      kappa[cont] <- round(model1$results$Kappa,3)
+      prev <- predict(model1,newdata = endo2,type = "raw")
+      variaveis[cont] <- str_c(v," + ",v2)
+      cont <- cont+1
+    }
+  }
+  cont2 <- cont2+1
+}
+
+knitr::kable(data.frame("Variáveis explicativas do modelo"=str_to_title(variaveis),"Acurácia"=acurr,"Kappa"=kappa))
+```
+
+## iii)
+Para modelos com três variáveis explicativas:
+
+```{r}
+control1 <- vector("character",4)
+control2 <- vector("character",4)
+acurr <- vector(mode = "numeric",4)
+kappa <- vector(mode = "numeric",4)
+cont <- 1
+cont2 <- 1
+cont3 <- 1
+variaveis <- vector("character",4)
+for(v in var){
+  control1[cont3] <- v
+  control2 <- vector("character",4)
+  for(v2 in var){
+    control2[cont2] <- v2
+    if(!(v2 %in% control1)){
+    
+      for(v3 in var){
+        if(!(v3 %in% control2)&!(v3 %in% control1)){
+          train_control = trainControl(method="repeatedcv", number=5,repeats=5)
+          frmla <- as.formula(str_c("endometriose~",v,"+",v2,"+",v3))
+          model1 = train(frmla,data=endo2,method="glm",family=binomial,trControl=train_control)
+          acurr[cont] <- round(model1$results$Accuracy,3)
+          kappa[cont] <- round(model1$results$Kappa,3)
+          prev <- predict(model1,newdata = endo2,type = "raw")
+          variaveis[cont] <- str_c(v," + ",v2," + ",v3)
+          cont <- cont+1
+        }
+      }  
+    }
+    cont2 <- cont2+1
+  }
+  cont3 <- cont3+1
+}
+
+knitr::kable(data.frame("Variáveis explicativas do modelo"=str_to_title(variaveis),"Acurácia"=acurr,"Kappa"=kappa))
+```
+
+## iv)
+Para o modelo com todas as quatro variáveis explicativas:
+
+```{r}
+train_control = trainControl(method="repeatedcv", number=5,repeats=5)
+model1 = train(endometriose~., data=endo2,method="glm", family=binomial, trControl=train_control)
+acurr <- round(model1$results$Accuracy,3)
+kappa <- round(model1$results$Kappa,3)
+prev <- predict(model1,newdata = endo2,type = "raw")
+variaveis <- str_c(var,collapse = " + ")
+
+knitr::kable(data.frame("Variáveis explicativas do modelo"=str_to_title(variaveis),"Acurácia"=acurr,"Kappa"=kappa))
+```
+
+Logo podemos concluir que o modelo com maior acurácia é aquele que possui a Dismenorréia e o tipo de esterilidade como variáveis explicativas.
+  $\mathbb{R}^8$

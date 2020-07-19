@@ -1,0 +1,84 @@
+---
+title: "Lista 9 - Exercícios de entrega"
+author: "Kevin Yukio Futema"
+date: "21/06/2020"
+output: pdf_document
+geometry: margin=0.5cm
+---
+
+# 1)
+
+## a)
+$\vdash(X,Y,Z|X+Y+Z+W=N)\sim Multinomial(N,\alpha_1,\alpha_2,\alpha_3)$ e determinar os $\alpha_1,\alpha_2,\alpha_3$.
+$$\mathbb{P}(X=x,Y=y,Z=z|X+Y+Z+W=N)=\frac{\mathbb{P}(X=x,Y=y,Z=z,X+Y+Z+W=N)}{\mathbb{P}(X+Y+Z+W=N)}$$
+Para as variáveis $X$, $Y$, $Z$, $W$, temos as funções geradoras de momentos $M_X(t)$, $M_Y(t)$, $M_Z(t)$, $M_W(t)$ , dadas por
+$$M_X(t)=e^{\lambda_1(e^t-1)}\hspace{0.5cm}M_Y(t)=e^{\lambda_2(e^t-1)}\hspace{0.5cm}M_Z(t)=e^{\lambda_3(e^t-1)}\hspace{0.5cm}M_W(t)=e^{\lambda_4(e^t-1)}$$
+Seja $S=X+Y+Z+W$,como $X$, $Y$, $Z$, $W$ são independentes, então podemos afimar que
+$$M_S(t)=M_X(t)M_Y(t)M_Z(t)M_W(t)=e^{(\lambda_1+\lambda_2+\lambda_3+\lambda_4)(e^t-1)}$$
+E portanto,pela unicidade da função geradora de momentos,podemos afirmar que 
+$$S\sim Poisson(\lambda_1+\lambda_2+\lambda_3+\lambda_4)$$
+$$\mathbb{P}(X=x,Y=y,Z=z|X+Y+Z+W=N)=\frac{\mathbb{P}(X=x,Y=y,Z=z,W=N-x-y-z)}{\mathbb{P}(S=N)}$$
+Pela independência de $X$, $Y$, $Z$, $W$,
+
+$$\mathbb{P}(X=x,Y=y,Z=z|X+Y+Z+W=N)=\frac{\mathbb{P}(X=x)\mathbb{P}(Y=y)\mathbb{P}(Z=z)\mathbb{P}(W=N-x-y-z)}{\mathbb{P}(S=N)}$$
+$$\mathbb{P}(X=x,Y=y,Z=z|X+Y+Z+W=N)=\frac{e^{-\lambda_1}\lambda_1^{x}}{x!} \frac{e^{-\lambda_2}\lambda_2^{y}}{y!} \frac{e^{-\lambda_3}\lambda_3^{z}}{z!} \frac{e^{-\lambda_4}\lambda_1^{(N-x-y-z)}}{(N-x-y-z)!}\frac{N!}{
+e^{-(\lambda_1+\lambda_2+\lambda_3+\lambda_4)}(\lambda_1+\lambda_2+\lambda_3+\lambda_4)^N}$$
+Apenas para tornar mais clara a resolução considere
+$$w=N-x-y-z\hspace{0.5cm}e\hspace{0.5cm}\theta=\lambda_1+\lambda_2+\lambda_3+\lambda_4$$
+$$\mathbb{P}(X=x,Y=y,Z=z|X+Y+Z+W=N)=\frac{N!}{x!y!z!w!}\frac{e^{-\theta}\lambda_1^{x}\lambda_2^{y}\lambda_3^{z}\lambda_4^{w}}{e^{-\theta}\theta^N}=\frac{N!}{x!y!z!w!}\left(\frac{\lambda_1}{\theta}\right)^x\left(\frac{\lambda_2}{\theta}\right)^y\left(\frac{\lambda_3}{\theta}\right)^z\left(\frac{\lambda_4}{\theta}\right)^w$$
+onde $x+y+z+w=N$.
+
+Logo podemos afirmar que $(X,Y,Z|X+Y+Z+W=N)\sim Multinomial\left(N,\frac{\lambda_1}{\theta},\frac{\lambda_2}{\theta},\frac{\lambda_3}{\theta},\frac{\lambda_4}{\theta}\right)$, ou simplesmente $$(X,Y,Z|X+Y+Z+W=N)\sim Multinomial\left(N,\frac{\lambda_1}{\theta},\frac{\lambda_2}{\theta},\frac{\lambda_3}{\theta}\right)$$
+assim como queríamos mostrar, e
+$$\alpha_1=\frac{\lambda_1}{\theta}\hspace{0.5cm}\alpha_2=\frac{\lambda_2}{\theta}\hspace{0.5cm}\alpha_3=\frac{\lambda_3}{\theta}$$
+
+## b)
+Quero encontrar a distribuição de $(X,Y|X+Z=n,X+Y+Z+W=N)$.
+$$\mathbb{P}(X=x,Y=y|X+Z=n,X+Y+Z+W=N)=\frac{\mathbb{P}(X=x,Y=y,X+Z=n,X+Y+Z+W=N)}{\mathbb{P}(X+Z=n,X+Y+Z+W=N)}$$
+$$\mathbb{P}(X=x,Y=y|X+Z=n,X+Y+Z+W=N)=\frac{\mathbb{P}(X=x)\mathbb{P}(Y=y)\mathbb{P}(Z=n-x)\mathbb{P}(W=N-n-y)}{\mathbb{P}(X+Z=n,Y+W=N-n)}$$
+Sabemos ainda, pela tabela de contingência, que $X+Z$  e $Y+W$ são independentes.
+
+$$\mathbb{P}(X=x,Y=y|X+Z=n,X+Y+Z+W=N)=\frac{\mathbb{P}(X=x)\mathbb{P}(Y=y)\mathbb{P}(Z=n-x)\mathbb{P}(W=N-n-y)}{\mathbb{P}(X+Z=n)\mathbb{P}(Y+W=N-n)}$$
+De forma análoga ao que foi feito no item **a)** (com funções geradoras de momentos), obtemos
+$$X+Z\sim Poisson(\lambda_1+\lambda_3)\hspace{0.5cm}e\hspace{0.5cm}Y+W\sim Poisson(\lambda_2+\lambda_4)$$
+Para simplificar a notação considere
+$$\theta_1=\lambda_1+\lambda_3\hspace{0.5cm}e\hspace{0.5cm}\theta_2=\lambda_2+\lambda_4$$
+$$\mathbb{P}(X=x,Y=y|X+Z=n,X+Y+Z+W=N)=\frac{e^{-\lambda_1}\lambda_1^{x}}{x!} \frac{e^{-\lambda_2}\lambda_2^{y}}{y!} \frac{e^{-\lambda_3}\lambda_3^{(n-x)}}{(n-x)!} \frac{e^{-\lambda_4}\lambda_4^{(N-n-y)}}{(N-n-y)!}\frac{(N-n)!n!}{
+e^{-(\lambda_1+\lambda_3)}(\lambda_1+\lambda_3)^ne^{-(\lambda_2+\lambda_3)}(\lambda_2+\lambda_3)^{(N-n)}}$$
+$$\mathbb{P}(X=x,Y=y|X+Z=n,X+Y+Z+W=N)=\binom n x \left(\frac{\lambda_1}{\theta_1}\right)^x\left(\frac{\lambda_3}{\theta_1}\right)^{(n-x)} \binom {N-n} y \left(\frac{\lambda_2}{\theta_2}\right)^y\left(\frac{\lambda_4}{\theta_2}\right)^{(N-n-y)}$$
+Sejam $T$ e $U$ duas variaveis aleatórias independentes, tais que
+$$T\sim Binomial\left(n,\frac{\lambda_1}{\theta_1}\right)\hspace{0.5cm}e\hspace{0.5cm}U\sim Binomial\left(N-n,\frac{\lambda_2}{\theta_2}\right)$$
+Então podemos dizer que
+$$\mathbb{P}(X=x,Y=y|X+Z=n,X+Y+Z+W=N)=\mathbb{P}(T=x)\mathbb{P}(U=y)$$
+$$\beta_1=\frac{\lambda_1}{\theta_1}\hspace{0.5cm}\beta_2=\frac{\lambda_2}{\theta_2}$$
+
+## c)
+$\vdash(X|X+Z=n,X+Y=r,X+Y+Z+W=N)\sim Hipergeometrica(N,n,r)$
+$$\mathbb{P}(X=x|X+Z=n,X+Y=r,X+Y+Z+W=N)=\frac{\mathbb{P}(X=x,X+Z=n,X+Y=r,X+Y+Z+W=N)}{\mathbb{P}(X+Z=n,X+Y=r,X+Y+Z+W=N)}$$
+Pela independência de $X$, $Y$, $Z$, $W$,
+
+$$\mathbb{P}(X=x|X+Z=n,X+Y=r,X+Y+Z+W=N)=\frac{\mathbb{P}(X=x)\mathbb{P}(Z=n-x)\mathbb{P}(Y=r-x)\mathbb{P}(W=N-r-n+x)}{\mathbb{P}(X+Z=n,X+Y=r,X+Y+Z+W=N)}$$
+Considere o conjunto 
+$$D=\{k\in\mathbb{N}:max\{0,N-n-r\}\leq k\leq min\{n,r\}\}$$
+Pelo Teorema da probabilidade Total, obtemos
+
+$$\mathbb{P}(X=x|X+Z=n,X+Y=r,X+Y+Z+W=N)=\frac{\mathbb{P}(X=x)\mathbb{P}(Z=n-x)\mathbb{P}(Y=r-x)\mathbb{P}(W=N-r-n+x)}{\sum_{k \in D}[\mathbb{P}(X=k)\mathbb{P}(Z=n-k)\mathbb{P}(Y=r-k)\mathbb{P}(W=N-r-n+k)]}$$
+Iremos resolver separadamente o numerador e o denominador.
+Para o numerador:
+$$\mathbb{P}(X=x)\mathbb{P}(Z=n-x)\mathbb{P}(Y=r-x)\mathbb{P}(W=N-r-n+x)= \frac{e^{-\lambda_1}\lambda_1^{x}}{x!} \frac{e^{-\lambda_2}\lambda_2^{(r-x)}}{(r-x)!} \frac{e^{-\lambda_3}\lambda_3^{(n-x)}}{(n-x)!} \frac{e^{-\lambda_4}\lambda_4^{(N-n-r+x)}}{(N-n-r+x)!}$$
+Note que $\lambda_1^x\lambda_2^{-x}\lambda_3^{-x}\lambda_4^x=1$, pois $\frac{\lambda_1\lambda_4}{\lambda_2\lambda_3}=1$.
+
+Considere ainda $\theta=\lambda_1+\lambda_2+\lambda_3+\lambda_4$,
+$$\mathbb{P}(X=x)\mathbb{P}(Z=n-x)\mathbb{P}(Y=r-x)\mathbb{P}(W=N-r-n+x)=e^{-\theta}\frac{\binom r x \binom {N-n} {r-x}}{\binom N r}\frac{N!}{r!(N-n)!(N-r)!n!}$$
+$$\sum_{k \in D}[\mathbb{P}(X=k)\mathbb{P}(Z=n-k)\mathbb{P}(Y=r-k)\mathbb{P}(W=N-r-n+k)]=\sum_{k \in D}e^{-\theta}\frac{\binom r k \binom {N-n} {r-k}}{\binom N r}\frac{N!}{r!(N-n)!(N-r)!n!}$$
+Para simplificar a notação, considere também
+$$C=\frac{N!}{r!(N-n)!(N-r)!n!}$$
+Desta forma, podemos escrever
+$$\sum_{k \in D}[\mathbb{P}(X=k)\mathbb{P}(Z=n-k)\mathbb{P}(Y=r-k)\mathbb{P}(W=N-r-n+k)]=e^{-\theta}C\sum_{k \in D}\frac{\binom r k \binom {N-n} {r-k}}{\binom N r}$$ 
+Note que $\sum_{k \in D}\frac{\binom r k \binom {N-n} {r-k}}{\binom N r}=1$, pois é a soma para todo $k$ do domínio da função de distribuição de probabilidade de uma variavel aleatória $Hipergeométrica(N,n,r)$, então
+$$\sum_{k \in D}[\mathbb{P}(X=k)\mathbb{P}(Z=n-k)\mathbb{P}(Y=r-k)\mathbb{P}(W=N-r-n+k)]=e^{-\theta}C$$
+Podemos então escrever,
+$$\mathbb{P}(X=x|X+Z=n,X+Y=r,X+Y+Z+W=N)=\frac{e^{-\theta}\frac{\binom r x \binom {N-n} {r-x}}{\binom N r}C}{e^{-\theta}C}=\frac{\binom r x \binom {N-n} {r-x}}{\binom N r}{1}_{x \in D}(x)$$
+Logo $(X|X+Z=n,X+Y=r,X+Y+Z+W=N)\sim Hipergeometrica(N,n,r)$
+
+

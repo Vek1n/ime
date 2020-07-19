@@ -1,0 +1,319 @@
+---
+title: "Lista 3 - MAE217"
+output: html_document
+---
+```{r,echo = F, message=FALSE, warning=FALSE}
+library(GGally)
+library(stringr)
+library(dplyr)
+library(tidyr)
+library(readxl)
+library(gdata)
+library(ggplot2)
+library(plyr)
+library(hash)
+```
+
+# Exercício 1 do capítulo 5
+## a)
+Observando a tabela a seguir, é possível observar que para todas as combinações de dosagens das substâncias A e B, os erros padrões são, de modo geral, relativamente pequenos.Sendo assim, observando as médias de cada combinação é razoavel supor empiricamente que a combinação baixa dosagem da substância A e alta dosagem da substância B é a com menor tempo esperado do desaparecimento dos sintomas.
+```{r,echo = F, message=FALSE, warning=FALSE}
+# library(readxl)
+# library(gdata)
+# library(ggplot2)
+# library(plyr)
+
+dos <- read_excel("C:/Users/kevin/Downloads/dosagens.xlsx")
+dos$A <- sub(dos$A,pattern = "media",replacement = "alta")
+a <- rep("baixa",8)
+b <- rep("média",8)
+c <- rep("alta",8)
+doses_B <- c(a,b,c)
+doses_A <- rep(dos$A,3)
+dias <- c(dos$b,dos$m,dos$a)
+data <- data.frame(doses_A,doses_B,dias)
+resumo <- ddply(data, c("doses_A", "doses_B"), summarise,
+ N = sum(!is.na(dias)),
+ mean = mean(dias, na.rm=TRUE),
+ sd = sd(dias, na.rm=TRUE),
+ se = sd / sqrt(N))
+knitr::kable(resumo,digits = 2,col.names = c("Dosagem A","Dosagem B","n","média","desvio padrão","erro padrão"))
+```
+
+## b)
+
+O modelo utilizado para comparar os 6 tratamentos é comumente chamado de ANOVA (_Analysis of Variance_), além disso os fatores em questão são: **dosagem da substância A** com níveis *alta* e *baixa*; **dosagem da substância B** com níveis *baixa*, *média* e *alta*.
+
+## c)
+```{r,echo = F,message=F,warning=F}
+pd <- position_dodge(0.1)
+ggplot(resumo, aes(x=doses_B, y=mean, colour=doses_A)) +
+  geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.1,
+position=pd) +
+  geom_line(aes(group = doses_A)) +
+  geom_point(position=pd) +
+  theme_bw() +
+  labs(x="Dosagem B", y="Tempo (dias)",color = "Dosagem A",title = "Gráfico de perfis médios") +
+  theme(text=element_text(size=18))
+
+```
+
+Figura 1: Gráfico de perfis médios (com barras de desvios padrões) para os dados da tabela dada
+
+Esse gráfico sugere que há interação entre os fatores pois mesmo levando em consideração os desvios padrões o efeito da Dosagem da substância A para cada um dos níveis da Dosagem da substância B indica fortemente que a diferença dos valores esperados não é nulo para todos os níves da Dosagem B.
+
+## d)
+Tabela ANOVA dos dados:
+```{r,echo = F,message=F,warning=F}
+
+#ANOVA com dois fatores
+# library(gdata)
+dosagem.anova <- aov(dias ~ doses_A + doses_B +
+doses_A*doses_B, data=data)
+summary(dosagem.anova)
+```
+
+Assim como o esperado pela análise do gráfico de perfis médios, o resultado acima sugerem fortes evidências de que existe interação entre as dosagens das substâncias A e B.
+
+Obs: Vale ressaltar que um dos pressuspostos para a utilização da ANOVA seria a homoscedasticidade, isto é em outras palavras, a igualdade das variâncias para cada combinação das dosagens, entretanto, a tabela do exercício **a)** mostra que o desvio padrão é bem maior para a combinação onde ambas as dosagens são baixas.Sendo assim, deve ficar claro que para verificar se a variância populaciona também é maior para essa combinação poderia ser formalizado um teste de hipótese para avaliar se essas diferenças são significativas ou não.
+
+# Exercício 4 do capítulo 5
+## a)
+No instante *Repouso* é possível notar que não há carga na esteira, e portanto a abordagem para esse instante será diferente dos demais.
+
+```{r,echo = F,message=F,warning=F}
+esf <- read_excel(path="C:/Users/kevin/Downloads/esforco.xls",sheet = 2)
+eti_vo2 <- list(esf$...3,as.numeric(esf$...14))
+dados <- data.frame(eti_vo2)
+dados <- dados[c(-1,-2),]
+names(dados) <- c("Etiologia","VO2 REP")
+resumo <- ddply(dados, c("Etiologia"), summarise,
+ N = sum(!is.na(`VO2 REP`)),
+ mean = mean(`VO2 REP`, na.rm=TRUE),
+ sd = sd(`VO2 REP`, na.rm=TRUE),
+ se = sd / sqrt(N))
+pd <- position_dodge(0.1)
+ggplot(resumo,aes(x = Etiologia,y = mean,group = 1)) +
+  geom_errorbar(aes(ymin=mean-se,ymax=mean+se),width = .1)+
+  geom_line()+
+  geom_point()+
+  labs(x="Etiologia",y = "Médias de VO2 (ml/kg/min)",title = "Gráfico de perfis médios para o instante repouso")
+
+  
+
+```
+
+Os gráficos de perfis médios estão apresentados a seguir:
+
+```{r,echo = F,message=F,warning=F }
+# library(GGally)
+################
+panel.cor <- function(x, y, digits = 2, cex.cor, ...)
+{
+  usr <- par("usr"); on.exit(par(usr))
+  par(usr = c(0, 1, 0, 1))
+  # pearson's correlation coefficient
+  r <- cor(x, y)
+  txt <- format(c(r, 0.123456789), digits = digits)[1]
+  txt <- paste("r = ", txt, sep = "")
+  text(0.5, 0.6, txt)
+
+  # spearman's correlation coefficient
+  p <- cor(x, y,method = "spearman")
+  txt2 <- format(c(p, 0.123456789), digits = digits)[1]
+  txt2 <- paste("p = ", txt2, sep = "")
+  text(0.5, 0.4, txt2)
+}
+################
+eti_vo2 <- list(esf$...3,as.numeric(esf$...24),as.numeric(esf$...37),as.numeric(esf$...49),as.numeric(esf$LAN),as.numeric(esf$PCR),as.numeric(esf$`Pico (W)`))
+dados <- data.frame(eti_vo2)
+dados <- dados[c(-1,-2),]
+names(dados) <- c("Etiologia","VO2 LAN","VO2 PCR","VO2 PICO","LAN","PCR","PICO")
+dados <- na.omit(dados)
+eti <- c("C","CH","ID","IS")
+carga <- c("LAN","PCR","PICO")
+for(e in eti){
+  for(c in carga){
+    dados %>%
+      filter(Etiologia == e) %>% 
+      select(c,str_c("VO2 ",c)) %>% 
+      pairs(,upper.panel = panel.cor,main = str_c("Gráfico do desenhista plot para o nível ",e ," da etiologia"),labels = c(str_c("Carga ",c),str_c("VO2 ",c))) 
+    }
+}
+```
+
+Obs: p nos gráficos é a correlação de spearman e r é a correlação de pearson, além é possivel notar que não há carga no instante Repouso e portanto é impossível fazer um drafsman plot para a carga no instante Repouso.
+
+## b)
+```{r,echo = F, message=FALSE, warning=FALSE}
+# library(dplyr)
+
+fc <- c("Repouso","...23","...36","...48")
+eti <- c("C","CH","IS","ID")
+nyha <- c("1","2","3","4")
+instante <- c("REP","LAN","PCR","PICO")
+i <-  1
+for(f in fc){
+  data <- esf %>% 
+    select(...3,...11,f) %>% 
+    filter(...3 %in% eti,...11 %in% nyha)
+  names(data) <- c("eti","nyha","fc")
+  data$fc <- as.numeric(data$fc)
+###############################################################
+  resumo <- ddply(data, c("eti", "nyha"), summarise,
+ N = sum(!is.na(fc)),
+ mean = mean(fc, na.rm=TRUE),
+ sd = sd(fc, na.rm=TRUE),
+ se = sd / sqrt(N))
+###############################################################
+  pd <- position_dodge(0.1)
+gplot <- ggplot(resumo, aes(x=nyha, y=mean, colour=eti)) +
+  geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.1,
+position=pd) +
+  geom_line(aes(group = eti)) +
+  geom_point(position=pd) +
+  theme_bw() +
+  labs(x="NYHA", y="Frequência cardíaca (bpm)",color = "Etiologia",title = str_c("Gráfico de perfis para o instante ",instante[i])) + 
+  theme(text=element_text(size=18))
+
+print(knitr::kable(resumo,digits = 2,col.names = c("Etiologia","NYHA","n","média","desvio padrão","erro padrão"),caption = str_c("Tabela de medidas resumo para o instante ",instante[i])))
+
+print(gplot)
+i <- i+1
+}
+
+```
+
+De um modo geral, os dois fatores não parecem possuir interação.
+
+Obs: Utilizando as tabelas de medidas resumo como apoio, é possível notar que existem combinações da *Etiologia* e do critério *NYHA*, que só possuem uma única observação no conjunto de dados, e por isso esses pontos não aprensentam nenhuma variabilidade (representada pelas barras de erros padrões).Outro ponto também notório é o fato de n serem considerados as unidades amostrais do grupo etiológico controle (C) pois, por serem do grupo controle,não estão avaliados pelo critério de gravidade NYHA.
+
+## c) 
+
+As tabelas anovas abaixo, estão dispostas na mesma ordem dos gráficos de perfis médios do item **b)**.
+
+```{r,echo = F,message=F,warning=F}
+for(f in fc){
+  data <- esf %>% 
+    select(...3,...11,f) %>% 
+    filter(...3 %in% eti,...11 %in% nyha)
+  names(data) <- c("eti","nyha","fc")
+  data$fc <- as.numeric(data$fc)
+  anova <- aov(fc ~ eti + nyha +
+eti*nyha, data=data) 
+  print(summary(anova))
+  print(shapiro.test(data$fc))
+} 
+    
+```
+
+# Exercício 8 do capítulo 5
+## a)
+As matrizes de correlação para cada concentração estão dispostas abaixo:
+
+```{r,echo = F,message=F,warning=F}
+# library(stringr)
+palat <- read_excel("C:/Users/kevin/Downloads/palato.xls")
+names(palat) <- palat[1,]
+palat <- palat[-1,]
+########################
+#Função que calcula o vetor de médias
+vm <- function(dt){
+  x <- vector("double",ncol(dt))
+  for(i in seq_along(dt)){
+    x[[i]] <- mean(dt[[i]])
+  }
+  return(x)
+}
+########################
+tratamentos <- c("0","1","8","16","32","64")
+#tentando padronizar a resolução do problema usando um for 
+v <- "O vetor de médias para o nível "
+for(i in tratamentos){
+  trat <- subset(palat,subset = Tratamento == i,select = -Tratamento)
+  vmt <- round(vm(trat),digits = 2)
+  print(ggcorr(trat,label=T,)+labs(title = str_c("Matriz de correlação para a concentração ",i," (µM)")))
+  print(str_c(v,i," é: ",str_c(na.omit(vmt),collapse = " ")))
+}
+
+```
+
+Obs: O resultado apresentado no cálculo dos vetores de médias possui arredondanmento de duas casas decimais afim de facilitar a interpretação.Além disso os coeficientes de correlação dispostos nas matrizes é aquele proposto por Pearson.
+
+
+## b)
+```{r,echo = F,message=F,warning=F}
+# library(dplyr)
+# library(tidyr)
+
+for(i in tratamentos){
+  trat <- subset(palat,subset = Tratamento == i,select = -Tratamento)
+  trat %>% 
+    dplyr::mutate(id= dplyr::row_number()) %>% 
+    gather(tempo,velocidade,-id) %>% 
+    dplyr::mutate(tempo=factor(tempo,levels = c("5","10","15","20","25","30","35"))) %>% 
+    ggplot(aes(x=tempo,y = velocidade,group = as.integer(id),color = id )) +
+    geom_line() +
+    geom_point() +
+    geom_smooth(method="loess",se=F,aes(group=1),color="red") +
+    labs(title = str_c("Gráfico de perfis individuais para a concentração ",i," (µM)"),color = "Identificador")
+
+   
+} %>% print()
+pala <- gather(palat,tempo,velocidade,"5":"35") %>% mutate(tempo=factor(tempo,levels = c("5","10","15","20","25","30","35")),Tratamento=factor(Tratamento,as.character(c(0,1,8,16,32,64))))
+resumo1 <- plyr::ddply(pala, c("Tratamento","tempo"), summarise,
+ N = sum(!is.na(velocidade)),
+ mean = mean(velocidade, na.rm=TRUE),
+ sd = sd(velocidade, na.rm=TRUE),
+ se = sd / sqrt(N))
+pd <- position_dodge(0.1)
+resumo1 <- resumo1[order(resumo1$tempo),]
+ggplot(resumo1, aes(x=tempo, y=mean, colour=Tratamento)) +
+  geom_errorbar(aes(ymin=mean-se, ymax=mean+se), width=.1,
+position=pd) +
+  geom_line(aes(group = Tratamento)) +
+  geom_point(position=pd) +
+  theme_bw() +
+  labs(x="Tempo", y="Velocidade (mm/s)",color = "Concentração (µM)") +
+  theme(text=element_text(size=18))
+
+```
+
+Obs:A velocidade referida nos gráficos acima é a velocidade de transporte mucociliar (mm/s), que é a variavel resposta do experimento.Além disso as curvas em vermelho nos gráficos de perfis individuais, é a curva lowess.
+
+## c) 
+
+Com base na análise dos gráficos do item **b)**, podemos concluir que em níveis mais baixos da concentração de peróxido de hidrogênio (0µM,1µM,8µM), a velocidade tende a ser mais constante em relação ao tempo e maior do que em que concentrações mais altas, além disso é possível notar que, partindo da concentração mais baixa de todas (0µM) até a concentração de 8µM, essa velocidade parece aumentar conforme a concentração.Entretanto, para as concentrações mais médias (16µM e 32µM), a velocidade aparenta uma queda ao decorrer do tempo e após essa queda, é possível ainda identificar uma tendência de estabilização para a velocidade.Enfim, para a concentração mais alta, a velocidade também apresenta uma determinada constância, porém com uma velocidade bem menor, do que para as outras concentrações.
+
+# Exercício 9 do capítulo 5
+```{r,echo = F,message=F,warning=F}
+#library(hash)
+curso <- rep(c("CQ","CF","CB","B"),each=2)
+prof <- rep(c("A","B"),times=4)
+aprov <- c(8,11,10,13,19,20,14,12)
+naprov <- c(11,13,14,9,25,18,2,4)
+tabela <- tibble(curso,prof,aprov,naprov)
+ratio <- hash()
+for(i in levels(as.factor(tabela$curso))){
+  tbl <- tabela %>% 
+    select(aprov,naprov) %>% 
+    filter(curso==i) 
+  deno <- tbl[1,1]/tbl[2,1]
+  nume <- tbl[1,2]/tbl[2,2]
+  odd <- nume/deno
+  ratio[[i]] <- round(odd,3)
+}
+curso <- c("Ciências Químicas","Ciências Físicas","Ciências Biológicas","Bioquímica")
+razao <- c(ratio[["CQ"]],ratio[["CF"]],ratio[["CB"]],ratio[["B"]])
+final <- as.data.frame(tibble(curso,razao))
+names(final) <- c("Curso","Razão de chances")
+knitr::kable(final,caption = "Tabela com as razões de chances")
+```
+
+Obs: As razões de chances foram calculadas tendo como fator de risco a *avaliação do professor A*
+
+# Exercício 10 do capítulo 5
+
+
+
+

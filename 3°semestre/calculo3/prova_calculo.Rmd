@@ -1,0 +1,241 @@
+---
+title: "Segunda Avaliação"
+subtitle: "Cálculo III"
+author: "Kevin Yukio Futema 11221539"
+date: "17/07/2020"
+output: pdf_document
+---
+
+# 1) 
+Enunciado: 
+
+ Calcule a massa da superficie S dada por $z=2 x^{2}+3 y^{2}$ com $0 \leq x \leq 1$, $0 \leq y \leq 1$, sabendo-se que a densidade de $S$ é definida por $\delta(x, y, z)=\frac{z}{\sqrt{1+16 x^{2}+36 y^{2}}}$
+ 
+Resolução:
+
+Sabemos que a massa de $S$, é dada pela integral de superfície de $\delta(x, y, z)$ sobre $S$, isto é,
+$$\text{Massa de S}=\iint_S\delta(x, y, z)dS$$
+Sendo assim, considere a seguinte parametrização de $S$:
+
+\begin{align*}
+\sigma(u,v):\begin{cases}x=u & 0\leq u \leq 1\\y=v\\z=2 u^{2}+3 v^{2} & 0\leq v\leq 1 \end{cases}
+\end{align*}
+
+Além disso, teremos 
+\begin{align*}
+\begin{cases}\sigma_u=(1,0,4u)\\\sigma_v=(0,1,6v) \end{cases}\text{ Então }\sigma_u\wedge\sigma_v=(-4u,-6v,1)\implies \|\sigma_u\wedge\sigma_v\|=\sqrt{1+16u^2+36v^2}
+\end{align*}
+$$
+\delta(\sigma(u,v))=\frac{2 u^{2}+3 v^{2}}{\sqrt{1+16u^2+36v^2}}
+$$
+Considere $D=\{(u,v)\in\mathbb{R}^2:0\leq u \leq 1,0\leq v \leq 1\}$
+
+Calculando a massa de $S$:
+\begin{align*}
+\iint_S\delta(x, y, z)dS&=\iint_D\delta(\sigma(u,v))\|\sigma_u\wedge\sigma_v\|dudv=\int_0^1\left[\int_0^12 u^{2}+3 v^{2}du\right]dv\\
+&=\int_0^1\frac{2u^3}{3}+3uv^2\Big|_0^1dv=\int_0^1\frac{2}{3}+3v^2dv=\left.\frac{2v}{3}+v^3\right|
+_0^1\\
+&=\frac{2}{3}+1=\frac{5}{3}
+\end{align*}
+A massa de $S$ é $\frac{5}{3}$
+
+
+# 2) 
+Enunciado:
+
+Calcule a área da superfície $S$ dada pela parte da esfera $x^{2}+y^{2}+z^{2}=4$, com $z \geq \sqrt{3 x^{2}+3 y^{2}}$.
+
+Resolução:
+
+Sabemos que a área de $S$, é dada pela integral de superfície de $1$ sobre $S$, isto é,
+$$\text{Área de S}=\iint_S1dS$$
+Sendo assim, considere a seguinte parametrização de $S$:
+
+\begin{align*}
+\sigma(u,v):\begin{cases} x=2cos{(u)} sen{(v)} & 0\leq u \leq 2\pi\\y=2sen{(u)}sen{(v)}\\z=2cos{(v)} & 0\leq v\leq \ ? \leq \frac{\pi}{2} \end{cases}
+\end{align*}
+Note que $v\leq\frac{\pi}{2}$, pois $z\geq0$ e $v$ atinge a maior angulação quando $z=\sqrt{3 x^{2}+3 y^{2}}$, então 
+
+\begin{align*}
+x^2+y^2+z^2&=4\\
+x^2+y^2+3x^2+3y^2&=4\\
+x^2+y^2&=1\implies 4sen^2{(v)}=1\overbrace{\implies}^{0\leq v\leq \frac{\pi}{2}}sen{(v)}=\frac{1}{2}\\
+v&=\frac{\pi}{6}
+\end{align*}
+Desta forma
+\begin{align*}
+\sigma(u,v):\begin{cases} x=2cos{(u)} sen{(v)} & 0\leq u \leq 2\pi\\y=2sen{(u)}sen{(v)}\\z=2cos{(v)} & 0\leq v\leq \frac{\pi}{6} \end{cases}
+\end{align*}
+
+Além disso, teremos 
+\begin{align*}
+\begin{cases}\sigma_u=(-2sen(u)sen(v),2cos(u)sen(v),0)\\\sigma_v=(2cos(u)cos(v),2sen(u)cos(v),-2sen(v)) \end{cases}
+\end{align*}
+$$\sigma_u\wedge\sigma_v=(-4cos(u)sen^2(v),-4sen(u)sen^2(v),-4sen(v)sen(v))$$
+\begin{align*}
+\|\sigma_u\wedge\sigma_v\|^2&=16cos^2(u)sen^4(v)+16sen^2(u)sen^4(v)+16sen^2(v)cos^2(v)=16sen^4(v)+16sen^2(v)cos^2(v)\\
+&=16sen^2(v)\implies \|\sigma_u\wedge\sigma_v\|=4|sen(v)|=4sen(v) \hspace{1cm} sen(v)>0 \text{ pois }  0\leq v\leq \frac{\pi}{6}
+\end{align*}
+
+Considere $D=\{(u,v)\in\mathbb{R}^2:0\leq u \leq 2\pi,0\leq v\leq \frac{\pi}{6}\}$
+
+Calculando a área de $S$:
+\begin{align*}
+\iint_S1dS&=\iint_D\|\sigma_u\wedge\sigma_v\|dudv=\int_0^{2\pi}\left[\int_0^{\frac{\pi}{6}} 4sen(v)dv\right]du\\
+&=2\pi\int_0^{\frac{\pi}{6}} 4sen(v)dv=8\pi\left.\left(-cos(v)\right)\right|_0^{\frac{\pi}{6}}=8\pi\left(\frac{-\sqrt{3}}{2}+1\right)\\
+&=\frac{16\pi-8\pi\sqrt{3}}{2}
+\end{align*}
+A área de $S$ é $\frac{16\pi-8\pi\sqrt{3}}{2}$
+
+# 3) 
+Enunciado: 
+
+Calcule $\iint_{S}\left(x^{2}+2 y+z\right) d S,$ sendo $S$ a parte do plano $z=4+2 x$ que está no interior do cilindro \hspace{1.5cm} $x^{2}+y^{2}-2 y=0$
+
+Resolução:
+
+Para calcular essa integral de superfície, considere a seguinte parametrização de $S$:
+
+\begin{align*}
+\sigma(u,v):\begin{cases} x=vcos{(u)} & 0\leq u \leq 2\pi\\y=vsen{(u)}+1\\z=4+2vcos{(v)} & 0\leq v\leq \ 1 \end{cases}
+\end{align*}
+Além disso, teremos 
+
+\begin{align*}
+\begin{cases}\sigma_u=(-vsen(u),vcos(u),-2vsen(u))\\\sigma_v=(cos(u),sen(u),2cos(u)) \end{cases}\text{ Então }\sigma_u\wedge\sigma_v=(2v,0,-v)\implies \|\sigma_u\wedge\sigma_v\|=v\sqrt{5}
+\end{align*}
+
+Considere $D=\{(u,v)\in\mathbb{R}^2:0\leq u \leq 2\pi,0\leq v \leq 1\}$
+
+Calculando a massa de $S$:
+\begin{align*}
+\iint_{S}\left(x^{2}+2 y+z\right)dS&=\int_0^1\left[\int_0^{2\pi} \left(v^2cos^2(u)+2vsen(u)+2+4+2vcos(u)\right)v\sqrt{5}du\right]dv\\
+&=\sqrt{5}\int_0^1\left[\int_0^{2\pi} \left(v^3cos^2(u)+2v^2sen(u)+6v+2v^2cos(u)\right)du\right]dv\\
+&=\sqrt{5}\int_0^1\left.\left[v^3\left(\frac{u}{2}+\frac{sen(2u)}{4}\right)-2v^2cos(u)+6vu+2v^2sen(u)\right]\right|_0^{2\pi}dv\\
+&=\sqrt{5}\int_0^1 \left(v^3\pi+12v\pi \right)dv=\pi\sqrt{5}\left.\left(\frac{v^4}{4}+6v^2\right)\right|_0^{1}=\pi\sqrt{5}\left(\frac{1}{4}+6\right)\\
+&=\frac{25\pi\sqrt{5}}{4}
+\end{align*}
+
+Então
+
+$$
+\iint_{S}\left(x^{2}+2 y+z\right)dS=\frac{25\pi\sqrt{5}}{4}
+$$
+
+# 4) 
+Enunciado: 
+
+Calcule $\iint_{S} e^{x^{2}} d y d z+2 z d z d x+4 x y d x d y$, sendo $S$ a parte do gráfico da função $z=\sqrt{9-y},$ com $x \geq 0, y \geq 0$ e $0 \leq y \leq 8-x^{2},$ orientada com campo normal unitário $\vec{n}$ tal que $\vec{n} \cdot \vec{k} \geq 0$.
+
+Resolução:
+
+Temos que $\vec{F}(x,y,z)=\left(e^{x^{2}},2z ,4 x y\right)$
+
+Considere a seguinte parametrização de $S$:
+
+\begin{align*}
+\sigma(u,v):\begin{cases}x=u & 0\leq u \leq \sqrt{8}\\y=v\\z=\sqrt{9-v} & 0\leq v\leq 8-u^2 \end{cases}
+\end{align*}
+
+Além disso, teremos 
+\begin{align*}
+\begin{cases}\sigma_u=(1,0,0)\\\sigma_v=\left(0,1,\frac{-1}{2\sqrt{9-v}}\right) \end{cases}\text{ Então }\sigma_u\wedge\sigma_v=\left(0,\frac{1}{2\sqrt{9-v}},1\right)
+\end{align*}
+Note que essa parametrização nos fornece um vetor normal que já  está no sentido desejado, então não há necessidade de fazermos nada para arrumar o sentido.
+$$
+\vec{F}(\sigma(u,v))=\left(e^{u^2},2\sqrt{9-v},4uv\right)
+$$
+$$
+\vec{F}\cdot\sigma_u\wedge\sigma_v=1+4uv
+$$
+Considere $D=\{(u,v)\in\mathbb{R}^2: 0\leq u \leq \sqrt{8},0\leq v\leq 8-u^2\}$
+
+Desta forma,
+\begin{align*}
+\iint_{S} e^{x^{2}} dydz + 2z dzdx + 4xy dxdy &=\iint_D\vec{F}(\sigma(u,v))\cdot\sigma_u\wedge\sigma_v dudv=\int_0^{\sqrt{8}}\left[\int_0^{8-u^2} 1+4uv dv\right]du \\
+&=\int_0^{\sqrt{8}}\left(v+2uv^2\Big|_0^{8-u^2}\right)du=\int_0^{\sqrt{8}}\left(8-u^2+2u(64-16u^2+u^4)\right)du\\
+&=\int_0^{\sqrt{8}}\left(8+128u-u^2-32u^3+2u^5\right)du=\left.\left(8u+64u^2-\frac{u^3}{3}-8u^4+\frac{u^6}{3}\right)\right|_0^{\sqrt{8}}\\
+&=8\sqrt{8}+64\cdot 8-\frac{8\sqrt{8}}{3}-64\cdot 8+\frac{8^3}{3}=\frac{512-16\sqrt{8}}{3}
+\end{align*}
+Então,
+$$
+\iint_{S} e^{x^{2}} dydz + 2z dzdx + 4xy dxdy=\frac{512-16\sqrt{8}}{3}
+$$
+
+# 5) 
+Enunciado: 
+
+Calcule $\iint_{S} \vec{F} \cdot \vec{n} d S$, sendo $\vec{F}=x \vec{i}+y \vec{j}+2 z \vec{k}$ e $S$ a parte da superfície $z=16-x^{2}-y^{2}$ que está acima do plano $z=7,$ orientada com campo normal unitário $\vec{n}$ tal que $\vec{n} \cdot \vec{k} \geq 0$.
+
+Resolução:
+
+Considere a seguinte parametrização de $S$:
+
+\begin{align*}
+\sigma(u,v):\begin{cases}x=\sqrt{16-v}cos(u) & 0\leq u \leq 2\pi\\y=\sqrt{16-v}sen(u)\\z=v & 7\leq v\leq16 \end{cases}
+\end{align*}
+
+Além disso, teremos 
+\begin{align*}
+\begin{cases}\sigma_u=(-\sqrt{16-v}sen(u),\sqrt{16-v}cos(u),0)\\\sigma_v=\left(-\frac{cos(u)}{2\sqrt{16-v}},-\frac{sen(u)}{2\sqrt{16-v}},1\right) \end{cases}\text{ Então }\sigma_u\wedge\sigma_v=\left(\sqrt{16-v}cos(u),\sqrt{16-v}sen(u),\frac{1}{2}\right)
+\end{align*}
+Note que essa parametrização nos fornece um vetor normal que já  está no sentido desejado, então não há necessidade de fazermos nada para arrumar o sentido.
+$$
+\vec{F}(\sigma(u,v))=\left(\sqrt{16-v}cos(u),\sqrt{16-v}sen(u),2v\right)
+$$
+$$
+\vec{F}\cdot\sigma_u\wedge\sigma_v=(16-v)cos^2u+(16-v)sen^2u+v=16-v+v=16
+$$
+
+\begin{align*}
+\iint_{S} \vec{F} \cdot \vec{n} d S=\int_0^{2\pi}\int_7^{16} 16dvdu=16\int_0^{2\pi}\int_7^{16} 1dvdu=16\cdot2\pi\cdot 9=288\pi
+\end{align*}
+Então,
+$$
+\iint_{S} \vec{F} \cdot \vec{n} d S=228\pi
+$$
+
+# 6) 
+Enunciado: 
+
+Calcule $\iint_{S} x d y d z+(2 x+y) d z d x+\cos \left(x^{2}+z\right) d x d y$, sendo $S$ a parte do cilindro $x^{2}+y^{2}=4$ que está no primeiro octante, entre os planos $z=0$ e $y+z=4,$ orientada com campo normal unitário $\vec{n}$ que se afasta do eixo $z$.
+
+Resolução:
+
+Temos que $\vec{F}(x,y,z)=\left(x,2x+y,cos(x^2+z)\right)$
+
+Considere a seguinte parametrização de $S$:
+
+\begin{align*}
+\sigma(u,v):\begin{cases}x=2cos(u) & 0\leq u \leq \frac{\pi}{2}\\y=2sen(u)\\z=v & 0\leq v\leq 4-2sen(u) \end{cases}
+\end{align*}
+
+Além disso, teremos 
+\begin{align*}
+\begin{cases}\sigma_u=(-2sen(u),2cos(u),0)\\\sigma_v=\left(0,0,1\right) \end{cases}\text{ Então }\sigma_u\wedge\sigma_v=\left(2cos(u),2sen(u),0\right)
+\end{align*}
+
+Note que essa parametrização nos fornece um vetor normal que já  está no sentido desejado, então não há necessidade de fazermos nada para arrumar o sentido.
+$$
+\vec{F}(\sigma(u,v))=\left(2cos(u),4cos(u)+2sen(u),cos(4cos^2(u)+v)\right)
+$$
+$$
+\vec{F}(\sigma(u,v))\cdot\sigma_u\wedge\sigma_v=4cos^2(u)+8cos(u)sen(u)+4sen^2(u)
+$$
+Considere $D=\{(u,v)\in\mathbb{R}^2: 0\leq u \leq \frac{\pi}{2},0\leq v\leq4-2sen(u)\}$
+\begin{align*}
+\iint_{S} x d y d z+(2 x+y) d z d x+\cos \left(x^{2}+z\right) d x d y
+&=\iint_D\vec{F}(\sigma(u,v))\cdot\sigma_u\wedge\sigma_v dudv\\
+&=\int_0^{\frac{\pi}{2}}\left[\int_0^{4-2sen(u)}4cos^2(u)+8cos(u)sen(u)+4sen^2(u) dv\right]du \\
+&=\int_0^{\frac{\pi}{2}}\left[\int_0^{4-2sen(u)}4+8cos(u)sen(u) dv\right]du\\
+&=\int_0^{\frac{\pi}{2}}\left(4v+8vcos(u)sen(u)\Big|_0^{4-2sen(u)}\right)du\\
+&=\int_0^{\frac{\pi}{2}}\left(16-8sen(u)+32cos(u)sen(u)-16cos(u)sen^2(u)\right)du\\
+&=\left.\left(16u+8cos(u)+\frac{32sen^2(u)}{2}-\frac{16sen^3(u)}{3}\right)\right|_0^{\frac{\pi}{2}}\\
+&=\frac{16\pi}{2}+16-\frac{16}{3}-8=8-\frac{16}{3}+\frac{16\pi}{2}=\frac{48-32+48\pi}{6}\\
+&=\frac{16+48\pi}{6}
+\end{align*}
+
+Então,
+$$
+\iint_{S} x d y d z+(2 x+y) d z d x+\cos \left(x^{2}+z\right) d x d y=\frac{16+48\pi}{6}
+$$

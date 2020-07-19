@@ -1,0 +1,466 @@
+---
+title: "Lista 4 - MAE0217"
+output: word_document
+---
+
+### Todos os exercícios são do capítulo 6 
+```{r,echo =F,message=F,warning=F}
+library(ggplot2)
+library(ggfortify)
+```
+
+# Exercício 1
+## a)
+Considerando o modelo dado
+$$y_{i}= \beta x_{i} + e_{i}, \hspace{1cm} i = 1,_{\cdots},n$$
+onde $\mathrm{E(e_i)}=0$ e $\mathrm{Var(e_i)=\sigma^2}$.
+Então, assim como apresentado no texto base iremos considerar a soma dos quadrados dos erros $e_i$,
+$$\mathrm{Q(\beta)}=\sum_{i=1}^n e_i=\sum_{i=1}^n(y_i-\beta x_i)^2$$
+Para determinar o estimador de mínimos quadrados de $\beta$, faremos o seguinte precedimento:
+
+1. Derivar $\mathrm{Q(\beta)}$ em relação a $\beta$
+2. Igualar o resultado dessa derivação à zero, obtendo assim a equação de estimação
+
+E a solução dessa equação será $\hat{\beta}$, o estimador desejado.
+
+(1)
+$$\frac{\partial Q}{\partial\beta} = \sum_{i=1}^n \frac{\partial(y_i-\beta x_i)^2}{\partial \beta}=\sum_{i=1}^n -2x_i(y_i-\beta x_i)=-2\sum_{i=1}^n (x_iy_i-\beta x_i^2)=-2(\sum_{i=1}^n x_iy_i-\beta\sum_{i=1}^nx_i^2)$$ 
+Assim, $$\frac{\partial Q}{\partial\beta}=-2(\sum_{i=1}^n x_iy_i-\beta\sum_{i=1}^nx_i^2)$$
+(2)
+Agora, igualando a derivada à zero obtemos:
+$$\frac{\partial Q}{\partial\beta}=-2(\sum_{i=1}^n x_iy_i-\beta\sum_{i=1}^nx_i^2)=0$$
+$$\sum_{i=1}^n x_iy_i-\beta\sum_{i=1}^nx_i^2=0$$
+Por fim, o estimador para $\hat\beta$ é: $$\hat \beta=\frac{\sum_{i=1}^n x_iy_i}{\sum_{i=1}^nx_i^2}$$
+Seguindo o mesmo raciocínio adotado no livro para a proposição de um estimador não enviesado para $\sigma^2$, podemos afimar que um estimador não viesado é:
+$$\mathrm S^2=\frac{1}{n-1}Q(\hat\beta)=\frac{1}{n-1}\sum_{i=1}^n \hat e_i^2=\frac{1}{n-1}\sum_{i=1}(y_i-\hat\beta x_i)^2$$
+pois perdemos um grau de liberdade na estimação de um parâmetro ($\hat\beta$)
+
+## b)
+Para determinar a distribuição aproximada de $\hat\beta$ devemos considerar alguns pontos, dentre os quais alguns já estão satisfeitos pelas suposições do próprio exercício,
+
+1. $\mathrm{E(e_i)}=0$ 
+2. $\mathrm{Var(e_i)=\sigma^2}$ constante (Homoscedasticidade)
+3. Os erros ($e_i$) são não correlacionados
+4. Suposição de normalidade ($e_i\sim N(0,\sigma^2)$)
+
+
+Dado que a condição 4 é a única não satisfeita de modo direto,existem duas maneiras de obter uma distribuição para $\hat\beta$ 
+
+1. Utilizando uma aproximação assintótica pelo Teorema Central do Limite (TLC). Isto é, para uma grande quantidade de observações, pode-se chegar à uma distribuição normal aproximada.
+
+2. Forçando que 4. seja válida.
+
+Podemos obter a seguinte distribuição
+$$\hat \beta\sim N(\beta,\frac{\sigma^2}{\sum_{i=1 }^nx_i^2})$$
+sendo esta aproximada pela maneira 1. e exata pela 2.
+Considere ainda a seguinte expressão
+$$\hat e_i=y_i-\hat y_i=y_i-\hat \beta x_i$$
+Desta forma, como o estimador de $\beta$ é uma transformação linear da distribuição dos resíduos, então podemos dizer que a distribuição aproximada, em ambos os casos, para $\hat\beta$ é,
+$$\hat \beta\sim N(\beta,\frac{S^2}{\sum_{i=i}^nx_i^2})$$ 
+
+E por fim, uma outra abordagem para a distribuição de $\hat\beta$ seria padronizá-la, e apartir dessa padronização obter uma distribuição t-Student com n-1 graus de liberdade.
+
+Deste modo, fazendo o que foi descrito acima obtemos,
+$$\frac{\hat\beta-\beta}{\sqrt{\frac{S^2}{\sum_{i=1}^nx_i^2}}}\sim t_{(n-1)}$$
+
+## c)
+Considerando a distribuição aproximada de $\hat\beta$ obtida no item **b)**, iremos construir um intervalo de confiança para o parâmetro $\beta$ com coeficiente de confiança $\gamma$,$0<\gamma<1$
+$$\mathrm{IC}(\beta,100\gamma\%)=[\hat\beta-z_\gamma(\frac{S^2}{\sum_{i=1}^nx_i^2})^{\frac{1}{2}},\hat\beta+z_\gamma(\frac{S^2}{\sum_{i=1}^nx_i^2})^{\frac{1}{2}}]$$
+
+# Exercício 2
+Considerando o modelo especificado no **Exercício 1**, definamos a reta dos valores esperados de $y_i, \hspace{1cm}i=1,_{\cdots},n$ como sendo,
+$$\mathrm{E(y_i)}=\beta x_i$$
+Então, fixando dois valores $x_i$ e $x_{i+1}$ faremos a seguinte manipulação algébrica,
+$$\mathrm{E}(y_i\mid x_{i+1})-\mathrm{E}(y_i\mid x_i)=\beta x_{i+1}-\beta x_i$$
+$$\mathrm{E}(y_i\mid x_{i+1})-\mathrm{E}(y_i\mid x_i)=\beta( x_{i+1}-x_i)$$
+$$\beta=\frac{\mathrm{E}(y_i\mid x_{i+1})-\mathrm{E}(y_i\mid x_i)}{( x_{i+1}-x_i)}$$
+Com o resultado acima, fica mais claro que $\beta$ corresponde a variação esperada para a variável Y por unidade de variação
+da variável X, uma vez que o denominador corresponde a variação em uma unidade da variável X e o numerador corresponde à diferença (variação) dos valores esperados de Y, para a correspondente variação da variável X.
+
+# Exercício 3
+```{r,echo =F,message=F,warning=F}
+notas <- c(8.6,8.6,7.8,6.5,7.2,6.6,5.6,5.5,8.2,5.8,7.6,8.0,6.2,7.6,6.5,5.6,5.7,5.8)
+x <- c(rep(1,9),rep(-1,9))
+data <- data.frame(x,notas)
+g1 <- ggplot(data,aes(x=x,y=notas))+
+  geom_point()+
+  geom_smooth(se=F,method = "lm")
+```
+
+
+Dado,
+$$y_i=\alpha+\beta x_i+e_i, \hspace{1cm}i=1,_{\cdots},18$$
+onde os $e_i$ são erros aleatórios e não correlacionados com $E(e_i)=0$ e $Var(e_i)=\sigma^2$.
+
+## i)
+Considerando o modelo dado, podemos interpretar $\alpha$ e $\beta$ da seguinte forma:
+
+1. $\alpha:=$ "Média das notas independentemente do tipo de escola onde o aluno estudou"
+2. $\beta:=$ "Variação média da nota com relação à que tipo de escola se estuda"
+
+## ii)
+Considere o seguinte script no R:
+```{r,echo =F,message=F,warning=F}
+mod <- lm(notas~x)
+summary(mod)
+
+```
+Logo, temos,
+$$\hat\alpha\approx6.86$$
+$$\hat\beta\approx0.32$$
+E uma estimativa para $\sigma^2$ é,
+$$\hat\sigma^2\approx1.17$$
+
+## iii)
+Em um primeiro instante, como consequência quase direta da observação do script apresentado o item *ii)*, temos,
+$$R^2=0.090 \hspace{0.25cm}e\hspace{0.25cm} R^2_{ajustado}=0.034$$
+Dado que o coeficiente de determinação é bem pequeno, podemos concluir que pouquíssima variabilidade dos dados é explicada pelo modelo. Então iremos em um segundo instante avaliar algumas suposições do modelo que não são detectadas por essa ferramenta.
+
+```{r,echo =F,message=F,warning=F}
+df <- data.frame(x,mod$residuals)
+ggplot(df,aes(x=x,y=mod.residuals))+
+  geom_point()+
+  geom_hline(yintercept = 0)+
+  labs(x="Tipo de escola",y="Notas",title = "Gráfico de resíduos")
+
+```
+
+Com o gráfico de resíduos e o coeficiente de determinação apresentados acima, é razoável considerar a qualidade do ajuste como sendo bem ruim, pois os resíduos não parecem satisfazer a premissa de homocedasticidade. Além disso o coeficiente de determinação ($R^2_{ajustado}$) é extremamente baixo, como já havia sido constatado.
+
+
+## iv)
+```{r,echo =F,message=F,warning=F,include=F}
+confint(mod)
+```
+$$\mathrm{IC}(\alpha,95\%)\approx[6.31,7.40]$$
+$$\mathrm{IC}(\beta,95\%)\approx[-0.22,0.86]$$
+
+## v)
+Os intervalos de confiança obtidos estão apresentados abaixo
+$$\mathrm{IC}(y_1,95\%)=[6.41,7.94]$$
+$$\mathrm{IC}(y_2,95\%)=[5.77,7.30]$$
+Onde $y_1$ representa a nota dos alunos de escola particular e $y_2$ representa a nota dos alunos de escola pública
+```{r,echo =F,message=F,warning=F,include=F}
+
+new <- data.frame(x=c(1,-1))
+predict(mod,newdata = new,interval = "confidence")
+
+```
+
+## vi)
+De acordo com o modelo dado, temos apenas dois valores de $y_i$ ajustados, uma vez que a variável explicativa $x_i$ assume apenas 2 valores, sendo assim
+$$\hat y_i=\hat \alpha+\hat \beta x_i\implies \hat y_1=\hat y_2\iff \hat\beta=0 $$
+Logo, basta testar se $\hat\beta=0$ e, utilizando o script apresentado no item **ii)** verificamos que o teste $H_0:\beta=0$ contra $H_0:\beta\neq0$ fornece um $p\approx0.225$ e deste modo é possível afimar que não há evidência amostral de que $\beta\neq0$ logo, aceita-se $H_0$.Podendo então afimar que não há evidência amostral de que os valores esperados das notas sejam diferentes.
+
+## vii)
+
+```{r,echo =F,message=F,warning=F,include=F}
+notas <- c(8.6,8.6,7.8,6.5,7.2,6.6,5.6,5.5,8.2,5.8,7.6,8.0,6.2,7.6,6.5,5.6,5.7,5.8)
+x <- c(rep(1,9),rep(0,9))
+data <- data.frame(x,notas)
+g2 <- ggplot(data,aes(x=x,y=notas))+
+  geom_point()+
+  geom_smooth(se=F,method = "lm")
+```
+
+### 1)
+A interpretação de $\alpha$ e $\beta$ é a mesma apresentado no item **i)**.
+
+### 2)
+Considere o seguinte script no R:
+```{r,echo =F,message=F,warning=F}
+mod <- lm(notas~x)
+summary(mod)
+
+```
+Logo, temos,
+$$\hat\alpha\approx6.53$$
+$$\hat\beta\approx0.64$$
+E uma estimativa para $\sigma^2$ é,
+$$\hat\sigma^2\approx1.08$$
+
+### 3)
+
+Em um primeiro instante, como consequência quase direta da observação do script apresentado o item *ii)*, temos,
+$$R^2=0.090 \hspace{0.25cm}e\hspace{0.25cm} R^2_{ajustado}=0.034$$
+Dado que o coeficiente de determinação é bem pequeno, podemos concluir que pouquíssima variabilidade dos dados é explicada pelo modelo. Então iremos em um segundo instante avaliar algumas suposições do modelo que não são detectadas por essa ferramenta.
+
+```{r,echo =F,message=F,warning=F}
+df <- data.frame(x,mod$residuals)
+ggplot(df,aes(x=x,y=mod.residuals))+
+  geom_point()+
+  geom_hline(yintercept = 0)+
+  labs(x="Tipo de escola",y="Notas",title = "Gráfico de resíduos")
+```
+
+A interpretação do gráfico de resíduos é semelhante à feita em **iii)**.
+
+### 4)
+
+```{r,echo =F,message=F,warning=F,include=F}
+confint(mod)
+```
+$$\mathrm{IC}(\alpha,95\%)\approx[5.77,7.30]$$
+$$\mathrm{IC}(\beta,95\%)\approx[-0.44,1.73]$$
+
+### 5)
+
+Os intervalos de confiança obtidos estão apresentados abaixo
+$$\mathrm{IC}(y_1,95\%)=[6.41,7.94]$$
+$$\mathrm{IC}(y_2,95\%)=[5.77,7.30]$$
+Onde $y_1$ representa a nota dos alunos de escola particular e $y_2$ representa a nota dos alunos de escola pública
+```{r,echo =F,message=F,warning=F,include=F}
+
+new <- data.frame(x=c(1,0))
+predict(mod,newdata = new,interval = "confidence")
+
+```
+
+### 6)
+
+De acordo com o modelo dado, temos apenas dois valores de $y_i$ ajustados, uma vez que a variável explicativa $x_i$ assume apenas 2 valores, sendo assim
+$$\hat y_i=\hat \alpha+\hat \beta x_i\implies \hat y_1=\hat y_2\iff \hat\beta=0 $$
+Logo, basta testar se $\hat\beta=0$ e, utilizando o script apresentado no item **ii)** verificamos que o teste $H_0:\beta=0$ contra $H_0:\beta\neq0$ fornece um $p\approx0.225$ e deste modo é possível afimar que não há evidência amostral de que $\beta\neq0$ logo, aceita-se $H_0$.Podendo então afimar que não há evidência amostral de que os valores esperados das notas sejam diferentes.
+
+
+# Exercício 5
+```{r,echo =F,message=F,warning=F,include=F}
+area <- c(128,125,200,4000,258,360,896,400,352,250,135,6492,1040,3000)
+preco <- c(10,9,17,200,25,40,70,25,35,27,11,120,35,300)
+preco <- preco*1000
+data <- data.frame(preco,area)
+```
+
+## i)
+```{r,echo =F,message=F,warning=F}
+ggplot(data,aes(x=area,y=preco))+
+  geom_point()+
+  labs(x="Área (m²)",y="Preço (R$)",title = "Gráfico de dispersão")
+```
+
+## ii)
+Considere o script do R,
+```{r,echo =F,message=F,warning=F}
+mod <- lm(preco~area)
+summary(mod)
+```
+Assim podemos obter as seguintes estimativas,
+$$\hat\alpha\approx26934.6\hspace{0.5cm}\mathrm{EP}_{\hat\alpha}=20758.38$$
+$$\hat\beta\approx31.0\hspace{0.5cm}\hspace{0.5cm}\mathrm{EP}_{\hat\beta}=9.31$$
+$$R^2=0.48 \hspace{0.25cm}e\hspace{0.25cm} R^2_{ajustado}=0.44$$
+```{r,echo =F,message=F,warning=F}
+df <- data.frame(area,mod$residuals)
+ggplot(df,aes(x=area,y=mod.residuals))+
+  geom_point()+
+  geom_hline(yintercept = 0)+
+  labs(x="Área (m²)",y="Resíduos (R$)",title="Gráfico de resíduos para o modelo linear simples")
+ggplot(mod,aes(area,.stdresid))+
+  geom_point()+
+  geom_hline(yintercept = 0)+
+  labs(x="Área (m²)",y="Resíduos padronizados",title="Gráfico de resíduos padronizados para o modelo linear simples")
+ggplot(mod)+
+  stat_qq(aes(sample=.stdresid))+
+  geom_abline()+xlab("Quantis teóricos")+
+  ylab("Resíduos padronizados")+
+  ggtitle("Normal Q-Q")+
+  theme_bw()
+autoplot(mod,which=4)+
+  labs(x="Número da observação",y="Distância de Cook",title="Gráfico de Cook")
+```
+
+O script do R a seguir está relacionado ao mesmo modelo de regressão linear simples porém, com a remoção dos pontos de alavanca indicados pelo **gráfico de Cook** acima (as observações 4, 12 e 14 foram removidas).
+
+```{r,echo=F, message=FALSE, warning=FALSE,include=F} 
+
+### Removendo os pontos influentes i = 4,12,14
+
+
+newdat <- data[c(-4,-12,-14),]
+area <- newdat$area
+preco <- newdat$preco
+ggplot(newdat,aes(x=area,y=preco))+
+  geom_point()+
+  labs(x="Área (m²)",y="Preço (R$)",title = "Gráfico de dispersão")
+
+newmod <- lm(preco~area,data=newdat)
+summary(newmod)
+
+df <- data.frame(area,newmod$residuals)
+ggplot(df,aes(x=area,y=newmod.residuals))+
+  geom_point()+
+  geom_hline(yintercept = 0)+
+  labs(x="Área (m²)",y="Resíduos (R$)",title="Gráfico de resíduos para o modelo linear simples")
+ggplot(newmod,aes(area,.stdresid))+
+  geom_point()+
+  geom_hline(yintercept = 0)+
+  labs(x="Área (m²)",y="Resíduos padronizados",title="Gráfico de resíduos padronizados para o modelo linear simples")
+ggplot(newmod)+
+  stat_qq(aes(sample=.stdresid))+
+  geom_abline()+xlab("Quantis teóricos")+
+  ylab("Resíduos padronizados")+
+  ggtitle("Normal Q-Q")+
+  theme_bw()
+autoplot(newmod,which=4)
+```
+
+```{r,echo=F, message=FALSE, warning=FALSE}
+summary(newmod)
+```
+Deste modo podemos então observar um novo $R^2_{ajustado}$,removendo os pontos de alavanca,
+$$R^2_{ajustado}=0.54$$
+Como o $R^2_{ajustado}$, com a remoção das observações específicadas, é maior entende-se que este é um modelo com mais qualidade do que o seu anterior (com todas as observações).
+
+## iii)
+Considere o modelo,
+$$y_i=\beta x_i^\gamma e_i$$
+Linearizando-o por meio de uma transformação logarítimica obtemos,
+$$log(y_i)=log(\beta)+\gamma log(x_i)+log(e_i)$$
+```{r,echo=F, message=FALSE, warning=FALSE}
+logmod <- lm(formula = log(preco)~log(area),data = data)
+summary(logmod)
+ggplot(data = data,aes(x=log(area),y=log(preco)))+
+  geom_point()+
+  geom_smooth(method = "lm",se=F)+
+  labs(title = "Gráfico de dispersão com os dados transformados e reta de regressão ajustada")
+```
+
+Temos então, que para a linearização neste modelo,
+$$R^2_{ajustado}=0.85$$
+Comparando o $R^2_{ajustado}$ do modelo linear simples do item **ii)** com o do modelo linearizado do item **iii)** podemos dizer o que o modelo linearizado possui maior qualidade no ajuste.É válido evidenciar o fato de que, mesmo com a remoção dos pontos de alavanca, o modelo de regressão linear simples, não explicar melhor a variabilidade do que a linearização do modelo dado em **iii)**.
+
+## iv)
+Logo, usando o modelo do item **iii)**,
+```{r,echo=F, message=FALSE, warning=FALSE, include=F}
+new <- data.frame(area=log(c(200,500,1000)))
+exp(predict(logmod,newdata = new,interval = "confidence"))
+```
+$$\mathrm{IC}(y_{200},95\%)=[441.9,2678.5]$$
+$$\mathrm{IC}(y_{500},95\%)=[514.0,2939.6]$$
+$$\mathrm{IC}(y_{1000},95\%)=[568.1,3126.6]$$
+
+
+
+# Exercício 7
+```{r,echo=F, message=FALSE, warning=FALSE}
+tabela <- readxl::read_xlsx(path = "C:/Users/kevin/Downloads/q7cap6t (1).xlsx")
+data <- tabela[,c("tempo","cand","porcent")]
+data$cand <- stringr::str_to_title(data$cand)
+```
+## a)
+```{r,echo=F, message=FALSE, warning=FALSE}
+ggplot(data,aes(x=tempo,y=porcent,color=cand))+
+  geom_point()+
+  labs(x="Tempo (dias)",y="Intenção de voto (%)",color="Candidato",title = "Gráfico de dispersão")
+```
+
+## b)
+Considere os seguintes modelos
+$$y_{it}=\alpha_i+\beta_i x_t+\gamma_i x_t^2+e_{it}\hspace{1cm}i=1,2\hspace{0.5cm}e\hspace{0.5cm}t=1,...,28$$
+onde $y_{it}$ representa a porcentagem de intenção de voto no canditado $i$ no instante $t$, $\alpha_i$ denota o valor esperado da intenção de voto no candidato i no começo da disputa eleitoral, $\beta_i$ e $\gamma_i$ representam os coeficientes dos termos linear e quadrático da curva que rege a variação temporal de intenção de voto  no canditado i no intervalo de tempo estudado e $e_{it}$ denota um erro aleatório com média 0 e variância $\sigma^2$ (isto é, $E(e_{it})=0$ e $Var(e_{it})=\sigma^2$). Utilizaremos t como índice para salientar que as observações são colhidas sequencialmente ao longo do tempo.Os candidatos estão codificados por 1 e 2 onde 1 representa a Dilma e 2 representa o Serra.
+
+Assim temos dois modelos,
+$$y_{1t}=\alpha_1+\beta_1 x_t+\gamma_1 x_t^2+e_{1t}\hspace{1cm}t=1,...,28$$
+$$y_{2t}=\alpha_2+\beta_2 x_t+\gamma_2 x_t^2+e_{2t}\hspace{1cm}t=1,...,56$$
+
+## c)
+```{r,echo=F, message=FALSE, warning=FALSE}
+dilmod <- lm(formula = porcent~tempo+I(tempo^2),data = data,subset = (cand=="Dilma"))
+sermod <- lm(formula = porcent~tempo+I(tempo^2),data = data,subset = (cand=="Serra"))
+```
+Para a candidata Dilma temos,
+```{r,echo=F, message=FALSE, warning=FALSE}
+summary(dilmod)
+```
+Para o candidato Serra temos,
+```{r,echo=F, message=FALSE, warning=FALSE}
+summary(sermod)
+```
+
+## d)
+Primeiramente analisando os resíduos dos dois modelos,
+
+```{r,echo=F, message=FALSE, warning=FALSE}
+ggplot(dilmod,aes(x=tempo,y=.stdresid))+
+  geom_point()+
+  geom_hline(yintercept = 0)+
+  labs(x="Tempo",y="Resíduos padronizados",title="Gráfico de resíduos padronizados para o modelo de Dilma")
+ggplot(sermod,aes(x=tempo,y=.stdresid))+
+  geom_point()+
+  geom_hline(yintercept = 0)+
+  labs(x="Tempo",y="Resíduos padronizados",title="Gráfico de resíduos padronizados para o modelo de Serra")
+```
+
+Com base na analise dos gráficos de resíduos, é razoável considerar satisfeita a hipóteses de homocedasticidade dos erros.
+Além disso, olhando os scripts do item **c)**, é coerente verificar como ficaria o modelo com a remoção do termo quadratico para o modelo que explica a variação da intenção de votos em porcentagem na candidata Dilma.E também é notório que os parâmetros do modelo ajustado para o candidato Serra, por causa dos valores -p bem pequenos dos testes de hipótese que testam se os parâmetros são nulos, é coerente refutar a ideia de que o modelo pode ser simplificado.
+Deste modo o novo modelo para Dilma,
+```{r,echo=F, message=FALSE, warning=FALSE}
+dilmod1 <- lm(formula = porcent~tempo,data = data,subset = (cand=="Dilma"))
+summary(dilmod1)
+```
+E ainda, seguindo este novo resultado é razoável supor que trata-se de uma regressão simples sem intercepto (regressão linear simples que passa pela origem),pois o valor-p para um teste de $H_0:\alpha=0$ contra $H_1:\alpha\neq 0$ é $p\approx0.305$ indicando que é uma suposição comedida.
+Um novo modelo mais simples para intenção de voto da canditada Dilma é
+$$y_{1t}=\beta_1 x_{1t}$$
+E não há evidências de que seja possível ajustar um modelo mais simples para o candidato Serra.
+
+## e)
+Em 3 de outubro de 2010, a quantidade de dias a partir de 16 de fevereiro de 2008 é `r as.Date("2010-10-03")-as.Date("2008-02-16")` dias
+```{r,echo=F, message=FALSE, warning=FALSE,include=F}
+#960 dias
+new <- data.frame(tempo=960)
+predict(object = dilmod1,newdata = new,interval = "confidence")
+predict(object = sermod,newdata = new,interval = "confidence")
+```
+$$\mathrm{IC}(y_{1,960^*},95\%)=[29.82,36.20]$$
+$$\mathrm{IC}(y_{2,960^*},95\%)=[20.14,32.16]$$
+Logo,
+$$\mathrm{IC}(y_{2,960^*}-y_{1,960^*},95\%)=[20.14-36.20,32.16-29.82]=[-16.06,2.34]$$
+$$\mathrm{IC}(y_{2,960^*}-y_{1,960^*},95\%)=[-16.06,2.34]$$
+Onde, $y_{i,960^*}$ representa a porcentagem da intenção de voto no candidato i, no dia 960, contado a partir da primeira pesquisa eleitoral.
+
+## f)
+# Criticar?
+
+# Exercício 15
+$\vdash SQTot = SQRes+SQReg$
+
+Para isso, consideraremos as seguintes expressões
+$$SQTot = \sum^n_{i=1}(y_i-\bar y)^2 \hspace{1cm}SQRes=\sum^n_{i=1}(y_i-\hat y_i)^2 \hspace{1cm}SQReg=\sum^n_{i=1}(\hat y_i-\bar y)^2$$
+Note que as expressões acima são definições para o caso de *Regressão linear simples* então podemos especificar o modelo associado,
+$$\hat y_i =\hat \alpha+\hat \beta x_i \hspace{1cm}(1)$$
+Além disso iremos enfatizar as equações de estimação(obtidas através das derivadas parciais em $\alpha$ e $\beta$ ,igualadas à zero,da soma dos quadrados dos resíduos),pois serão usadas em um ponto essencial dessa demonstração.
+$$n\hat \alpha+\hat \beta\sum_{i=1}^nx_i=\sum_{i=1}^ny_i \hspace{1cm}(2)$$
+$$\hat \alpha\sum_{i=1}^nx_i+\hat\beta \sum_{i=1}^nx_i^2=\sum_{i=1}^nx_iy_i \hspace{1cm}(3)$$
+
+Assim, desenvolvendo o primeiro membro da equação dada temos,
+$$SQTot=\sum_{i=1}^n(y_i-\bar y)^2=\sum_{i=1}^n[(y_i-\hat y_i)+(\hat y_i-\bar y)]^2$$
+$$SQTot=\sum^n_{i=1}[(y_i-\hat y_i)^2+2(y_i-\hat y_i)(\hat y_i-\bar y)+(\hat y_i-\bar y)^2]$$
+$$SQTot=\sum^n_{i=1}(y_i-\hat y_i)^2+\sum^n_{i=1}2(y_i-\hat y_i)(\hat y_i-\bar y)+\sum^n_{i=1}(\hat y_i-\bar y)^2$$
+$$SQTot = SQRes+SQReg+\sum^n_{i=1}2(y_i-\hat y_i)(\hat y_i-\bar y)$$
+Então basta,
+$\vdash\sum^n_{i=1}2(y_i-\hat y_i)(\hat y_i-\bar y)=0$
+$$\sum^n_{i=1}2(y_i-\hat y_i)(\hat y_i-\bar y)=2\sum^n_{i=1}[\hat y_i(y_i-\hat y_i)-\bar y(y_i-\hat y_i)]$$
+Denominando $e_i=y_i-\hat y_i$ então,
+$$2\sum^n_{i=1}[\hat y_i(y_i-\hat y_i)-\bar y(y_i-\hat y_i)]=2\sum^n_{i=1}[\hat y_ie_i-\bar ye_i]=2\sum^n_{i=1}\hat y_ie_i-2\bar y\sum^n_{i=1}e_i$$
+Agora, basta que,
+$$\sum^n_{i=1}\hat y_ie_i=0\hspace{0.25cm}(*) \hspace{0.25cm}e\hspace{0.25cm}\bar y\sum^n_{i=1}e_i=0\hspace{0.25cm}(**)$$
+Primeiro mostremos que a soma dos resíduos é nula,
+$$\sum^n_{i=1}e_i=\sum^n_{i=1}(y_i-\hat y_i)=\sum^n_{i=1}(y_i-\hat \alpha-\hat \beta x_i)$$
+$$\sum^n_{i=1}e_i=\sum^n_{i=1}(y_i-\hat \alpha-\hat \beta x_i)=\sum^n_{i=1}y_i-n\hat\alpha-\sum^n_{i=1}\hat\beta x_i$$
+Usando $(2)$,
+$$\sum^n_{i=1}e_i=0$$
+Como consequência direta desse resultado a equação $(**)$ vale.
+
+Para $(*)$,
+$$\sum^n_{i=1}\hat y_ie_i=\sum^n_{i=1}(\hat\alpha+\hat\beta x_i)e_i=\hat\alpha\sum^n_{i=1}e_i+\hat\beta\sum^n_{i=1}x_ie_i=0+\hat\beta\sum^n_{i=1}x_ie_i$$
+Por fim, 
+
+$\vdash\sum^n_{i=1}x_ie_i=0$
+$$\sum^n_{i=1}x_ie_i=\sum^n_{i=1}x_i(y_i-\hat y_i)=\sum^n_{i=1}x_i(y_i-\hat\alpha-\hat\beta x_i)$$
+$$\sum^n_{i=1}x_ie_i=\sum^n_{i=1}x_i(y_i-\hat\alpha-\hat\beta x_i)=\sum^n_{i=1}x_iy_i-\hat\alpha\sum^n_{i=1}x_i-\hat\beta\sum^n_{i=1}x_i^2$$
+Usando $(3)$ temos que
+$$\sum^n_{i=1}x_ie_i=0$$
+Sendo assim como as equações $(*)\hspace{0.25cm}(**)$ valem então isso implica que,
+$$\sum^n_{i=1}2(y_i-\hat y_i)(\hat y_i-\bar y)=0$$
+Logo, fica provado que,
+$$SQTot = SQRes+SQReg$$
+Observação: Nota-se que as equações $(2)$ e $(3)$ valem pois, essas equações são utilizadas na **construção** dos **estimadores de mínimos quadrados** ($\hat\alpha$ e $\hat\beta$) e portanto são *"forçadas"* a serem válidas.

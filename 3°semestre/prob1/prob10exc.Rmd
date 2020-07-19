@@ -1,0 +1,275 @@
+---
+title: "Exercícios de entrega-MAE0221"
+subtitle: "Lista 10 - Probabilidade I"
+author: "Kevin Yukio Futema 11221539"
+date: "12/07/2020"
+output: pdf_document
+---
+# 3)
+Temos do enunciado que $X_1,\ldots,X_n$ são independentes e idênticamente distribuídas com $X_i\sim U(0,1)$.
+
+O objetivo desse exercício é 
+$$\vdash -2n\ \mathrm{ln}Y\sim\chi^2_{(2n)}\hspace{1cm}Y=\left(\prod_{i=1}^nX_i\right)^{1/n}$$
+
+Considere agora as seguintes variáveis aleatórias auxiliares que userei neste exercício,
+$$
+Z_i=-\mathrm{ln}X_i\hspace{1cm}S=\sum_{i=1}^nZ_i
+$$
+Vamos também encontrar a relação entre $S$ e $-2n\ \mathrm{ln}Y$
+
+\begin{align*}
+-2n\ \mathrm{ln}Y&=-2n\ \mathrm{ln}\left(\prod_{i=1}^nX_i\right)^{1/n}=-2\ \mathrm{ln}\left(\prod_{i=1}^nX_i\right)\\
+&=2\sum_{i=1}^n\left(-\mathrm{ln}X_i\right)=2S
+\end{align*}
+
+Concluindo que $-2n\ \mathrm{ln}Y=2S$.
+
+Vamos encontrar a distribução de $Z_i$,
+$$
+F_{Z_i}(z)=\mathbb{P}(-\mathrm{ln}X_i\leq z)=\mathbb{P}(\mathrm{ln}X_i\geq -z)=\mathbb{P}(X_i\geq e^{-z})=1-\mathbb{P}(X_i\leq e^{-z})=1-F_{X_i}(e^{-z})
+$$
+Verificando o suporte de $Z$,
+$$
+0<e^{-z}<1\implies0<z<+\infty
+$$
+Derivando $F_{Z_i}(z)$ em relação à $z$ obtemos,
+$$
+f_{Z_i}(z)=\frac{\rm{d}}{\mathrm{d}z}F_{Z_i}(z)=-F_{X_i}(e^{-z})(-1)=F_{X_i}(e^{-z})=e^{-z}1_{(0,\infty)}(z)
+$$
+Desta forma sabemos que 
+$$
+f_{Z_i}(z)=e^{-z}1_{(0,\infty)}(z)\implies Z_i\sim Gama(1,1)
+$$
+Sabemos ainda que se $Z_i\sim Gama(1,1)$, então a função geradora de momentos de $Z_i$ é dada por $M_{Z_i}(t)=\frac{1}{1-t}$. 
+
+Pelo enunciado,$X_1,\ldots,X_n$ são independentes, então sabemos que $g_1(X_1),\ldots,g_n(X_n)$ também serão. Logo posso afirmar que os $Z_i$, para $i=1,\ldots,n$ serão independentes.
+
+Se $Z_1,\ldots,Z_n$ são independentes e com função geradora de momentos $M_{Z_i(t)}$, então sabemos que a função geradora de momentos de $S$ será dada pelo produto das funções geradoras $M_{Z_i(t)}$. Dessa maneira obteremos que $M_S(t)=\left(\frac{1}{1-t}\right)^n$.
+
+Porém não estamos interessados em $S$, e sim em $2S$. Então, observe que 
+$$
+M_{2S}(t)=\mathbb{E}(e^{2St})=M_S(2t)\implies M_{2S}(t)= \left(\frac{1}{1-2t}\right)^n=\left(\frac{1/2}{1/2-t}\right)^n
+$$
+E por fim, pela unicidade da função geradora de momentos, sabemos que 
+$$-2n\ \mathrm{ln}Y\sim\chi^2_{(2n)}$$
+ou ainda,
+$$-2n\ \mathrm{ln}Y\sim Gama\left(n,\frac{1}{2}\right)$$
+
+# 6)
+Temos do enunciado que $T\sim\chi^2_{(m)}$ e $U\sim\chi^2_{(n)}$ independentes.
+
+E quero mostrar que mostrar que 
+
+$$X=\frac{T/m}{U/n}\sim F_{(m,n)}$$
+
+Primeiro note que que se $Z\sim\chi_{(\nu)}^2$, então podemos afirmar também que $Z\sim Gama\left(\frac{\nu}{2},\frac{1}{2}\right)$, além disso sabemos que a função geradora de momentos de $Z$ é $M_Z(t)=\left(\frac{1/2}{1/2-t}\right)^{\nu/2}$.
+
+Observe agora que a função geradora de momentos de $\frac{Z}{\alpha}$ é $M_{\frac{Z}{\alpha}}(t)=\mathbb{E}(exp\left\{\frac{Z}{\alpha}t\right\})=M_Z(\frac{t}{\alpha})=\left(\frac{\alpha/2}{\alpha/2-t}\right)^{\nu/2}$, então pela unicidade da função geradora de momentos podemos afirmar que $\frac{Z}{\alpha}\sim Gama\left(\frac{\nu}{2},\frac{\alpha}{2}\right)$.
+
+Dessa forma, sabemos que $\frac{T}{m}\sim Gama\left(\frac{m}{2},\frac{m}{2}\right)$ e $\frac{U}{n}\sim Gama\left(\frac{n}{2},\frac{n}{2}\right)$
+Além disso sabemos que $T$ e $U$ são independentes, então podemos afirmar que $\frac{T}{m}$ e $\frac{U}{n}$, são independentes também.
+
+Para calcular $f_X(x)$, usaremos a seguinte relação:
+\begin{align*}
+f_X(x)&=\int_{-\infty}^{\infty}|u|f_{\frac{T}{m},\frac{U}{n}}(xu,u)du\overbrace{=}^\text{independência}\int_{-\infty}^{\infty}|u|f_{\frac{T}{m}}(xu)f_{\frac{U}{n}}(u)du\\
+&=\int_{0}^{\infty}uf_{\frac{T}{m}}(xu)f_{\frac{U}{n}}(u)du 
+\end{align*}
+Note que $|u|=u$, pois $\frac{U}{n}\sim Gama\left(\frac{n}{2},\frac{n}{2}\right)$. Então, $u\in(0,\infty)$.
+
+\begin{align*}
+f_X(x)&=\int_{0}^{\infty}uf_{\frac{T}{m}}(xu)f_{\frac{U}{n}}(u)du =\int_0^{\infty}u\frac{\left(\frac{m}{2}\right)^\frac{m}{2}}{\Gamma \left(\frac{m}{2}\right)}e^{-\frac{m}{2}xu}(xu)^{(\frac{m}{2}-1)}
+\frac{\left(\frac{n}{2}\right)^\frac{n}{2}}{\Gamma \left(\frac{n}{2}\right)}e^{-\frac{n}{2}u}u^{(\frac{n}{2}-1)}du\\
+&=\frac{\left(\frac{m}{2}\right)^\frac{m}{2}\left(\frac{n}{2}\right)^\frac{n}{2}}{\Gamma \left(\frac{n}{2}\right)\Gamma \left(\frac{m}{2}\right)}x^{\left(\frac{m}{2}-1\right)}\int_0^\infty e^{-u\left(\frac{mx+n}{2}\right)}u^{\left(\frac{m+n}{2}-1\right)}du
+\end{align*}
+
+Irei calcular a ultima integral separadamente, apenas para tornar mais clara a resolução,
+
+\begin{align*}
+\int_0^\infty e^{-u\left(\frac{mx+n}{2}\right)}u^{\left(\frac{m+n}{2}-1\right)}du=\frac{\Gamma \left(\frac{m+n}{2}\right)}{\left(\frac{mx+n}{2}\right)^{\left(\frac{m+n}{2}\right)}}\int_0^\infty\frac{\Gamma \left(\frac{m+n}{2}\right)}{\left(\frac{mx+n}{2}\right)^{\left(\frac{m+n}{2}\right)}} e^{-u\left(\frac{mx+n}{2}\right)}u^{\left(\frac{m+n}{2}-1\right)}du
+\end{align*}
+Note que 
+\begin{align*}
+\int_0^\infty\frac{\Gamma \left(\frac{m+n}{2}\right)}{\left(\frac{mx+n}{2}\right)^{\left(\frac{m+n}{2}\right)}} e^{-u\left(\frac{mx+n}{2}\right)}u^{\left(\frac{m+n}{2}-1\right)}du=1
+\end{align*}
+Pois essa integral é a integral para todos os valores do domínio de uma variável aleatória com distribuição $Gama\left(\frac{m+n}{2},\frac{mx+n}{2}\right)$
+
+Logo,
+\begin{align*}
+\int_0^\infty e^{-u\left(\frac{mx+n}{2}\right)}u^{\left(\frac{m+n}{2}-1\right)}du=\frac{\Gamma \left(\frac{m+n}{2}\right)}{\left(\frac{mx+n}{2}\right)^{\left(\frac{m+n}{2}\right)}}
+\end{align*}
+Voltando para o cálculo de $f_X(x)$,
+\begin{align*}
+f_X(x)&=\frac{\left(\frac{m}{2}\right)^\frac{m}{2}\left(\frac{n}{2}\right)^\frac{n}{2}}{\Gamma \left(\frac{n}{2}\right)\Gamma \left(\frac{m}{2}\right)}x^{\left(\frac{m}{2}-1\right)}\frac{\Gamma \left(\frac{m+n}{2}\right)}{\left(\frac{mx+n}{2}\right)^{\left(\frac{m+n}{2}\right)}}=x^{\left(\frac{m}{2}-1\right)}\frac{\left(\frac{m}{2}\right)^\frac{m}{2}\left(\frac{n}{2}\right)^\frac{n}{2}}{\Gamma \left(\frac{n}{2}\right)\Gamma \left(\frac{m}{2}\right)}
+\frac{\Gamma \left(\frac{m+n}{2}\right)}{\left[\left(\frac{n}{2}\right)\left(\frac{m}{n}x+1\right)\right]^{\left(\frac{m+n}{2}\right)}}\\
+&=\frac{\Gamma \left(\frac{m+n}{2}\right)\left(\frac{m}{n}\right)^{\frac{m}{2}}}{\Gamma \left(\frac{n}{2}\right)\Gamma \left(\frac{m}{2}\right)}\frac{x^{\left(\frac{m}{2}-1\right)}}{\left(\frac{m}{n}x+1\right)^{\left(\frac{m+n}{2}\right)}}1_{(0,\infty)}(x)
+\end{align*}
+Desta forma sabemos que 
+$$
+f_X(x)=\frac{\Gamma \left(\frac{m+n}{2}\right)\left(\frac{m}{n}\right)^{\frac{m}{2}}}{\Gamma \left(\frac{n}{2}\right)\Gamma \left(\frac{m}{2}\right)}\frac{x^{\left(\frac{m}{2}-1\right)}}{\left(\frac{m}{n}x+1\right)^{\left(\frac{m+n}{2}\right)}}1_{(0,\infty)}(x)\implies X\sim F(m,n)
+$$
+
+Então consguimos mostrar que $X=\frac{T/m}{U/n}\sim F_{(m,n)}$.
+
+# 10)
+Temos do enunciado que $Z\sim N(0,1)$ e $Y\sim \chi^2_{(k)}$. Onde $Z$ e $Y$ são independentes.
+
+Quero mostrar que 
+$$
+T=\frac{Z}{\sqrt{Y/k}}\sim t-Student(k)
+$$
+Utilizarei nesse exercício o método do Jacobiano. Desta forma, considere as seguintes variaveis
+$$
+\begin{cases}
+T=\frac{Z}{\sqrt{Y/k}}\\
+U=Y
+\end{cases}\implies 
+\begin{cases}
+Z=T\sqrt{\frac{U}{k}}\\
+Y=U
+\end{cases}
+$$
+Assim, $h_1(t,u)=t\sqrt{\frac{u}{k}}$ e $h_2(t,u)=u$ e o Jacobiano será
+
+$$
+|J_h|=\begin{vmatrix}
+\sqrt{\frac{u}{k}}&\frac{1}{2}t\left(\frac{u}{k}\right)^{-\frac{1}{2}}\\
+0&1
+\end{vmatrix}=\left|\sqrt{\frac{u}{k}}\right|=\sqrt{\frac{u}{k}}
+$$
+Como $Z$ e $Y$ são independentes então podemos afirmar que $f_{Z,Y}(z,y)=f_Z(z)f_Y(y)$, então
+\begin{align*}
+f_{T,U}(t,u)&=f_Z\left(t\sqrt{\frac{u}{k}}\right)f_Y(u)\sqrt{\frac{u}{k}}=\frac{1}{\sqrt{2\pi}}e^{-\frac{t^{2}u}{2k}}\frac{\left(\frac{1}{2}\right)^{\left(\frac{k}{2}\right)}}{\Gamma \left(\frac{k}{2}\right)}u^{\left(\frac{k}{2}-1\right)}e^{-\frac{1}{2}u}u^{\frac{1}{2}}\left(\frac{1}{k}\right)^{\frac{1}{2}}\\
+&=\frac{\left(\frac{1}{2}\right)^{\frac{k}{2}}\left(\frac{1}{k}\right)^{\frac{1}{2}}}{\sqrt{2\pi}\Gamma \left(\frac{k}{2}\right)}e^{-\frac{1}{2}\left(\frac{t^2}{k}+1\right)}u^{\left(\frac{k+1}{2}-1\right)}
+\end{align*}
+Então para calcular $f_T(t)$,
+\begin{align*}
+f_T(t)&=\int^{+\infty}_{-\infty}f_{T,U}(t,u)du=\int^{+\infty}_{0}\frac{\left(\frac{1}{2}\right)^{\frac{k}{2}}\left(\frac{1}{k}\right)^{\frac{1}{2}}}{\sqrt{2\pi}\Gamma \left(\frac{k}{2}\right)}e^{-u\frac{1}{2}\left(\frac{t^2}{k}+1\right)}u^{\left(\frac{k+1}{2}-1\right)}du\\
+&=\frac{\left(\frac{1}{2}\right)^{\frac{k}{2}}\left(\frac{1}{k}\right)^{\frac{1}{2}}\Gamma \left(\frac{k+1}{2}\right)}{\sqrt{2\pi}\Gamma \left(\frac{k}{2}\right)\left[\frac{1}{2}\left(\frac{t^2}{k}+1\right)\right]^{\left(\frac{k+1}{2}\right)}}\int^{+\infty}_{0}\frac{\left[\frac{1}{2}\left(\frac{t^2}{k}+1\right)\right]^{\left(\frac{k+1}{2}\right)}}{\Gamma \left(\frac{k+1}{2}\right)}e^{-u\frac{1}{2}\left(\frac{t^2}{k}+1\right)}u^{\left(\frac{k+1}{2}-1\right)}du
+\end{align*}
+Novamente, note que 
+$$
+\int^{+\infty}_{0}\frac{\left[\frac{1}{2}\left(\frac{t^2}{k}+1\right)\right]^{\left(\frac{k+1}{2}\right)}}{\Gamma \left(\frac{k+1}{2}\right)}e^{-u\frac{1}{2}\left(\frac{t^2}{k}+1\right)}u^{\left(\frac{k+1}{2}-1\right)}du=1
+$$
+pois é a integral para todos os valores do domínio de uma variável aleatória com distribuição $Gama\left(\frac{k+1}{2},\frac{1}{2}\left(\frac{t^2}{k}+1\right)\right)$
+
+Logo,
+\begin{align*}
+f_T(t)&=\frac{\left(\frac{1}{2}\right)^{\frac{k}{2}}\left(\frac{1}{k}\right)^{\frac{1}{2}}\Gamma \left(\frac{k+1}{2}\right)}{\sqrt{2\pi}\Gamma \left(\frac{k}{2}\right)\left[\frac{1}{2}\left(\frac{t^2}{k}+1\right)\right]^{\left(\frac{k+1}{2}\right)}}=\frac{\left(\frac{1}{2}\right)^{\frac{k}{2}}\left(\frac{1}{k}\right)^{\frac{1}{2}}\Gamma \left(\frac{k+1}{2}\right)}{\sqrt{2\pi}\Gamma \left(\frac{k}{2}\right)\left(\frac{1}{2}\right)^{\left(\frac{k}{2}\right)}\left(\frac{1}{2}\right)^{\left(\frac{1}{2}\right)}\left(\frac{t^2}{k}+1\right)^{\left(\frac{k+1}{2}\right)}}\\
+&=\frac{\Gamma \left(\frac{k+1}{2}\right)}{\sqrt{k\pi}\Gamma \left(\frac{k}{2}\right)\left(\frac{t^2}{k}+1\right)^{\left(\frac{k+1}{2}\right)}}=\frac{\Gamma \left(\frac{k+1}{2}\right)}{\Gamma \left(\frac{k}{2}\right)}\frac{1}{\sqrt{k\pi}\left(\frac{t^2}{k}+1\right)^{\left(\frac{k+1}{2}\right)}}1_{(-\infty,+\infty)}(t)
+\end{align*}
+Dessa forma sabemos que,
+$$
+f_T(t)=\frac{\Gamma \left(\frac{k+1}{2}\right)}{\Gamma \left(\frac{k}{2}\right)}\frac{1}{\sqrt{k\pi}\left(\frac{t^2}{k}+1\right)^{\left(\frac{k+1}{2}\right)}}1_{(-\infty,+\infty)}(t)\implies T\sim t-Student(k)
+$$
+Então conseguimos mostrar que $T=\frac{Z}{\sqrt{Y/k}}\sim t-Student(k)$
+
+# 13)
+Temos do enunciado que $X$ e $Y$ tem distribuição normal bivariada, com médias 0 , variâncias 1 e coeficiente de correlção $\rho$, $-1<\rho<1$.
+
+## a)
+Quero encontrar a função densidade de probabilidade de $Z=\frac{X}{Y}$
+A distribuição conjunta de $X$ e $Y$ é dada por 
+$$
+f_{X,Y}(x,y)=\frac{1}{2\pi\sqrt{1-\rho^2}}exp\left\{-\frac{(x^2+y^2-2xy\rho)}{2(1-\rho^2)}\right\}
+$$
+
+Irei utilizar o método do jacobiano para encontrar a distribuição de $Z$, então considere as seguintes variáveis aleatórias:
+$$
+\begin{cases}
+Z=\frac{X}{Y}\\W=Y
+\end{cases}\implies\begin{cases}X=ZW\\Y=W\end{cases}
+$$
+
+Assim, $h_1(z,w)=zw$ e $h_2(z,w)=w$ e o Jacobiano será
+$$
+|J_h|=\begin{vmatrix}
+w&z\\
+0&1
+\end{vmatrix}=\left|w\right|
+$$
+
+Então,
+
+$$
+f_{Z,W}(z,w)=f_{X,Y}(zw,w)|w|,\hspace{1cm}w \neq 0
+$$
+Logo,
+$$
+f_{Z,W}(z,w)=\frac{1}{2\pi\sqrt{1-\rho^2}}exp\left\{-\frac{(z^2w^2+w^2-2zw^2\rho)}{2(1-\rho^2)}\right\}|w|
+$$
+Para calcular $f_Z(z)$, irei integrar $f_{Z,W}(z,w)$ em $w$, então
+\begin{align*}
+f_Z(z)&=\int_{-\infty}^{+\infty}f_{Z,W}(z,w)dw=\int_{-\infty}^{+\infty}\frac{1}{2\pi\sqrt{1-\rho^2}}exp\left\{-\frac{(z^2w^2+w^2-2zw^2\rho)}{2(1-\rho^2)}\right\}|w|dw\\
+&=\frac{1}{2\pi\sqrt{1-\rho^2}}\int_{-\infty}^{+\infty}exp\left\{-\frac{(z^2+1-2z\rho)w^2}{2(1-\rho^2)}\right\}|w|dw
+\end{align*}
+Vamos estudar como é a função
+$$v=exp\left\{-\frac{(z^2+1-2z\rho)w^2}{2(1-\rho^2)}\right\}|w|$$
+para tornar mais fácil a vizualização, observe que a "forma" dessa função, é de um modo geral 
+$$y=e^{-ax^2}|x|,\hspace{1cm}x\neq0$$
+Com isso fica fácil ver que trata-se de uma função simétrica pelo eixo das ordenadas, e que é uma função não contínua no ponto em que $x=0$.
+Além disso note que $(z^2+1-2z\rho)>0$, $\forall z\in(-\infty,+\infty)$, pois 
+
+$$
+(z^2+1-2z\rho)=(z-\rho)^2-\rho^2+1
+$$
+e como todo número real ao quadrado é não negativo e $\rho^2<1$, então é válida a afirmação de que $a>0$.
+Esse fato será bem importante, para resolvermos a integral.
+
+Além disso temos que 
+$$\int_{-\infty}^{+\infty}exp\left\{-\frac{(z^2+1-2z\rho)w^2}{2(1-\rho^2)}\right\}|w|dw$$
+deveria ser quebrada em duas, dado que não está definida para $w=0$, e ao dividirmos essa função em dois intervalos que são completamente contínuos ($w>0$ e $w<0$), poderíamos calcular essa integral. Porém, ocorre que é uma função simétrica pelo eixo das ordenadas, então eu posso reescrever essa integral como 
+$$
+\int_{-\infty}^{+\infty}exp\left\{-\frac{(z^2+1-2z\rho)w^2}{2(1-\rho^2)}\right\}|w|dw=2\int_{0}^{+\infty}exp\left\{-\frac{(z^2+1-2z\rho)w^2}{2(1-\rho^2)}\right\}wdw
+$$
+obtendo uma única integral, com uma região de integração bem definida,o que facilita bastante as contas.
+Agora considere a seguinte mudança de variáveis:
+$$
+u=\frac{(z^2+1-2z\rho)w^2}{2(1-\rho^2)}\implies du=\frac{(z^2+1-2z\rho)w}{(1-\rho^2)}dw
+$$
+como $0<w<\infty$, então os limites de integração para $u$ serão os mesmos, pois $a=\frac{(z^2+1-2z\rho)}{(1-\rho^2)}>0$ como vimos acima, obtendo assim,
+\begin{align*}
+\int_{-\infty}^{+\infty}exp\left\{-\frac{(z^2+1-2z\rho)w^2}{2(1-\rho^2)}\right\}|w|dw&=2\int_{0}^{+\infty}exp\left\{-\frac{(z^2+1-2z\rho)w^2}{2(1-\rho^2)}\right\}wdw\\
+&=\frac{2(1-\rho^2)}{(z^2+1-2z\rho)}\int_{0}^{+\infty}e^{-u}du =\frac{2(1-\rho^2)}{(z^2+1-2z\rho)}
+\end{align*}
+Por fim, voltando ao cálculo de $f_Z(z)$
+\begin{align*}
+f_Z(z)&=\frac{1}{2\pi\sqrt{1-\rho^2}}\int_{-\infty}^{+\infty}exp\left\{-\frac{(z^2+1-2z\rho)w^2}{2(1-\rho^2)}\right\}|w|dw=\frac{1}{2\pi\sqrt{1-\rho^2}}\frac{2(1-\rho^2)}{(z^2+1-2z\rho)}\\
+&=\frac{\sqrt{1-\rho^2}}{\pi(z^2+1-2z\rho)}1_{(-\infty,+\infty)}(z)
+\end{align*}
+Para verificar que $f_Z(z)$ é de fato uma função densidade de probabiliade, ela deve satisfazer no mínimo 2 condições:
+
+1. $\int_{-\infty}^{+\infty}f_Z(z)dz=1$
+
+2. $f_Z(z)>0$, $\forall z\in(-\infty,+\infty)$
+
+Note que a condição $2.$, já foi verificada, pois
+$$
+a>0\implies \frac{1}{a}>0
+$$
+Assim como 
+
+$$
+\frac{1}{\pi a}>0
+$$
+
+Para verificarmos a condição $1.$, irei calcular a integral
+\begin{align*}
+\int_{-\infty}^{+\infty}f_Z(z)dz&=\int_{-\infty}^{+\infty}\frac{\sqrt{1-\rho^2}}{\pi(z^2+1-2z\rho)}dz=\frac{\sqrt{1-\rho^2}}{\pi}\int_{-\infty}^{+\infty}\frac{1}{(z^2+1-2z\rho)}
+\end{align*}
+Seja 
+$$
+u=z-p\implies du=dz
+$$
+$$
+\int\frac{1}{(z^2+1-2z\rho)}dz=\int\frac{1}{u^2+1-\rho^2}du=\frac{\arctan{\left(\frac{u}{\sqrt{1-\rho ^2}}\right)}}{\sqrt{1-\rho ^2}}=\frac{\arctan{\left(\frac{(z-p)}{\sqrt{1-\rho ^2}}\right)}}{\sqrt{1-\rho ^2}}
+$$
+\begin{align*}
+\int_{-\infty}^{+\infty}f_Z(z)dz&=\int_{-\infty}^{+\infty}\frac{\sqrt{1-\rho^2}}{\pi(z^2+1-2z\rho)}dz=\frac{\sqrt{1-\rho^2}}{\pi}\int_{-\infty}^{+\infty}\frac{1}{(z^2+1-2z\rho)}\\
+&=\frac{\sqrt{1-\rho^2}}{\pi}\left.\left[\frac{\arctan{\left(\frac{(z-p)}{\sqrt{1-\rho ^2}}\right)}}{\sqrt{1-\rho ^2}}\right]\right|_{-\infty}^{+\infty}=\frac{1}{\pi}\left.\left[\arctan{\left(\frac{(z-p)}{\sqrt{1-\rho ^2}}\right)}\right]\right|_{-\infty}^{+\infty}\\
+&=\frac{1}{\pi}\left(\frac{\pi}{2}+\frac{\pi}{2}\right)=\frac{1}{\pi}\pi=1
+\end{align*}
+
+Dessa forma podemos afirmar que 
+$$
+f_Z(z)=\frac{\sqrt{1-\rho^2}}{\pi(z^2+1-2z\rho)}1_{(-\infty,+\infty)}(z)
+$$
