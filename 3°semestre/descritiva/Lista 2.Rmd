@@ -1,9 +1,6 @@
 ---
 title: "Lista 2 - MAE0217"
-output:
-  html_document: default
-  word_document: default
-  pdf_document: default
+output: pdf_document
 ---
 
 # Exercício 33 do Capítulo 3

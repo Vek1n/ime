@@ -1,13 +1,6 @@
 ---
 title: "Lista 2 - MAE0315"
 date: "01/06/2020"
-author: 
-  - Kevin Yukio Futema 11221539 
-  - Caio Serrano de Araujo 10738008
-  - Camilla de Oliveira Fonseca 11221605
-  - Fernanda Shiba 11221518
-  - Juliana Kodono 11218261
-  - Tamires Vieira Alves 11221394
 output: pdf_document
 ---
 

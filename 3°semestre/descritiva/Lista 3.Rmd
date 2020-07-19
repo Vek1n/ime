@@ -1,6 +1,6 @@
 ---
 title: "Lista 3 - MAE217"
-output: html_document
+output: pdf_document
 ---
 ```{r,echo = F, message=FALSE, warning=FALSE}
 library(GGally)

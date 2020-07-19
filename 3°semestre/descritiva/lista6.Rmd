@@ -1,13 +1,5 @@
 ---
 title: "Lista 6 - MAE0217"
-author: 
-  - Caio Serrano de Araujo - 10738008
-  - Camilla de Oliveira Fonseca - 11221605
-  - Fernanda Shiba - 11221518
-  - Juliana Kodono - 11218261
-  - Kevin Yukio Futema - 11221539
-  - Tamires Vieira Alves - 11221394
-
 date: "23/06/2020"
 output: pdf_document
 ---
