@@ -2,7 +2,7 @@
 
 Sobre o projeto:
 
-A intenção é disponibilizar as listas das matérias com resoluções, mas apenas com o intuito de: 
+A intenção é disponibilizar as listas e provas das matérias da faculdade com resoluções, mas apenas com o intuito de: 
 
 1. Praticar os comandos do Git
 2. Arquivar de maneira mais organizada as resoluções
