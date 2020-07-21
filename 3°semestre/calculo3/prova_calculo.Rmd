@@ -1,7 +1,7 @@
 ---
 title: "Segunda Avaliação"
 subtitle: "Cálculo III"
-author: "Kevin Yukio Futema 11221539"
+author: "Kevin Yukio Futema"
 date: "17/07/2020"
 output: pdf_document
 ---
